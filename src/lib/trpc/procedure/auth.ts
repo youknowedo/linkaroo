@@ -70,25 +70,30 @@ export const auth = t.router({
 	login: t.procedure
 		.input(
 			z.object({
-				emailOrUsername: z.string().email(),
-				password: z.string().min(8)
+				emailOrUsername: z.string(),
+				password: z.string()
 			})
 		)
 		.mutation(async ({ ctx, input }): Promise<Res> => {
-			let user = (
+			let user: { id: string; passwordHash: string };
+
+			const userFromEmail = (
 				await db.select().from(userTable).where(eq(userTable.email, input.emailOrUsername))
 			)[0];
 
-			if (!user) {
-				user = (
+			if (userFromEmail) user = userFromEmail;
+			else {
+				const userFromUsername = (
 					await db.select().from(userTable).where(eq(userTable.username, input.emailOrUsername))
 				)[0];
 
-				if (!user)
+				if (!userFromUsername)
 					return {
 						success: false,
 						error: 'Invalid email or password'
 					};
+
+				user = userFromUsername;
 			}
 
 			const validPassword = await verify(user.passwordHash, input.password, {
