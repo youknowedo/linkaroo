@@ -3,6 +3,7 @@
 	import { trpc } from '$lib/trpc/client';
 	import { onMount } from 'svelte';
 	import type { WebsiteStats } from '../../../app';
+	import { Skeleton } from '../ui/skeleton';
 
 	let overview: WebsiteStats | null = null;
 
@@ -22,48 +23,78 @@
 
 <div class="grid grid-cols-3">
 	<div class="col-span-2 grid grid-cols-5">
-		<div class="flex flex-col items-center justify-center p-4">
+		<div class="stat">
 			<h4>Views</h4>
-			<p class="text-3xl font-bold">{overview?.views.value}</p>
-			<div>
+			<p>
 				{#if overview}
-					{overview.views.prev / overview.views.value || 0 * 100}%
+					{overview.views.value}
+				{/if}
+			</p>
+			<div class="tag">
+				{#if overview}
+					{(overview.views.prev / overview.views.value || 0 * 100) | 0}%
+				{:else}
+					<Skeleton class="h-7 w-8" />
 				{/if}
 			</div>
 		</div>
-		<div class="flex flex-col items-center justify-center p-4">
+		<div class="stat">
 			<h4>Visits</h4>
-			<p class="text-3xl font-bold">{overview?.visits.value}</p>
-			<div>
+			<p>
 				{#if overview}
-					{overview.visits.prev / overview.visits.value || 0 * 100}%
+					{overview.views.value}
+				{/if}
+			</p>
+			<div class="tag">
+				{#if overview}
+					{(overview.visits.prev / overview.visits.value || 0 * 100) | 0}%
+				{:else}
+					<Skeleton class="h-7 w-8" />
 				{/if}
 			</div>
 		</div>
-		<div class="flex flex-col items-center justify-center p-4">
+		<div class="stat">
 			<h4>Visitors</h4>
-			<p class="text-3xl font-bold">{overview?.visitors.value}</p>
-			<div>
+			<p>
 				{#if overview}
-					{overview.visitors.prev / overview.visitors.value || 0 * 100}%
+					{overview.views.value}
+				{/if}
+			</p>
+			<div class="tag">
+				{#if overview}
+					{(overview.visitors.prev / overview.visitors.value || 0 * 100) | 0}%
+				{:else}
+					<Skeleton class="h-7 w-8" />
 				{/if}
 			</div>
 		</div>
-		<div class="flex flex-col items-center justify-center p-4">
-			<h4>BounceRate</h4>
-			<p class="text-3xl font-bold">{overview?.bounceRate.value}%</p>
-			<div>
+		<div class="stat">
+			<h4>Bounce Rate</h4>
+			<p>
 				{#if overview}
-					{overview.bounceRate.prev / overview.bounceRate.value || 0 * 100}%
+					{overview.views.value}%
+				{/if}
+			</p>
+			<div class="tag">
+				{#if overview}
+					{(overview.bounceRate.prev / overview.bounceRate.value || 0 * 100) | 0}%
+				{:else}
+					<Skeleton class="h-7 w-8" />
 				{/if}
 			</div>
 		</div>
-		<div class="flex flex-col items-center justify-center p-4">
-			<h4>VisitDuration</h4>
-			<p class="text-3xl font-bold">{overview?.visitDuration.value}s</p>
-			<div>
+		<div class="stat">
+			<h4>Visit Duration</h4>
+			<p>
 				{#if overview}
-					{overview.visitDuration.prev / overview.visitDuration.value || 0 * 100}%
+					{overview.views.value}s
+				{/if}
+			</p>
+			<div class="tag">
+				{#if overview}
+					{(overview.visitDuration.prev / overview.visitDuration.value || 0 * 100) | 0}%
+				{:else}
+					<Skeleton class="h-7 w-8" />
 				{/if}
 			</div>
 		</div>
@@ -71,3 +102,18 @@
 
 	<div></div>
 </div>
+
+<style>
+	.stat {
+		@apply flex flex-col items-start justify-center gap-2;
+	}
+	.stat > h4 {
+		@apply whitespace-nowrap font-bold text-muted-foreground;
+	}
+	.stat > p {
+		@apply text-4xl font-bold;
+	}
+	.stat > .tag {
+		@apply rounded-md bg-muted px-2 py-0.5 text-muted-foreground;
+	}
+</style>
