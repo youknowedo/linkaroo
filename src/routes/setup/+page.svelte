@@ -37,7 +37,7 @@
 
 		if (!site) return alert('Site not found');
 
-		const { success, error } = await trpc($page).auth.setup.mutate({
+		const { success, error } = await trpc($page).setup.mutate({
 			...auth,
 			...site,
 			domain: window.location.origin
