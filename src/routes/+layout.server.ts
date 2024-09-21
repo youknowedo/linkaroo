@@ -6,7 +6,7 @@ import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ url }) => {
 	const setupCompleted =
-		(await db.select({}).from(userTable).where(eq(userTable.id, 'admin'))).length > 0;
+		(await db.select({}).from(userTable).where(eq(userTable.role, 'SUPER_ADMIN'))).length > 0;
 
 	if (!setupCompleted && url.pathname !== '/setup') return redirect(302, '/setup');
 };

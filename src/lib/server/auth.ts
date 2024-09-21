@@ -29,7 +29,7 @@ export const createAuthHandle =
 	(): Handle =>
 	async ({ event, resolve }) => {
 		const setupCompleted =
-			(await db.select({}).from(userTable).where(eq(userTable.id, 'admin'))).length > 0;
+			(await db.select({}).from(userTable).where(eq(userTable.role, 'SUPER_ADMIN'))).length > 0;
 
 		if (!setupCompleted) {
 			if (event.url.pathname !== '/setup') {

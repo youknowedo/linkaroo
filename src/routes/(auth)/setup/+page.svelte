@@ -26,9 +26,8 @@
 			passwordConfirmation
 		});
 
-		if (!success) return alert(error); // TODO: Toast
-
-		goto('/dashboard');
+		if (!success) return alert(error);
+		else goto('/dashboard');
 	};
 </script>
 
