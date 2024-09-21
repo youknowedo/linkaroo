@@ -21,6 +21,7 @@
     "@trpc/server": "^10.45.2",
     "@types/eslint": "^9.6.0",
     "@types/pg": "^8.11.10",
+    "@umami/api-client": "^0.76.0",
     "autoprefixer": "^10.4.20",
     "bits-ui": "^0.21.15",
     "clsx": "^2.1.1",

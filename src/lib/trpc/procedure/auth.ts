@@ -1,17 +1,14 @@
 import { lucia } from '$lib/server/auth';
 import { db } from '$lib/server/db/client';
+import { sitesTable } from '$lib/server/db/schema';
 import { userTable } from '$lib/server/db/schema/auth';
-import { t } from '$lib/trpc';
+import { t, type Res } from '$lib/trpc';
 import { eq } from 'drizzle-orm';
 import { generateIdFromEntropySize } from 'lucia';
 import { z } from 'zod';
+import { analytics } from './analytics';
 
 const { hash, verify } = await import('@node-rs/argon2');
-
-export type Res<T = unknown> = {
-	success: boolean;
-	error?: string;
-} & Partial<T>;
 
 export const auth = t.router({
 	setup: t.procedure
@@ -20,7 +17,10 @@ export const auth = t.router({
 				email: z.string().email(),
 				username: z.string().min(3).max(20),
 				password: z.string().min(8),
-				passwordConfirmation: z.string().min(8)
+				passwordConfirmation: z.string().min(8),
+
+				websiteName: z.string().min(3).max(20),
+				domain: z.string().url()
 			})
 		)
 		.mutation(async ({ ctx, input }): Promise<Res> => {
@@ -55,6 +55,26 @@ export const auth = t.router({
 			ctx.cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: '.',
 				...sessionCookie.attributes
+			});
+
+			const { websiteName, domain } = input;
+
+			const { ok, data } = await analytics.createWebsite({
+				name: websiteName,
+				domain
+			});
+
+			if (!ok || !data)
+				return {
+					success: false,
+					error: 'Failed to create analytics profile'
+				};
+
+			await db.insert(sitesTable).values({
+				id: generateIdFromEntropySize(10),
+				name: websiteName,
+				domain,
+				umamiId: data.id
 			});
 
 			return {

@@ -8,6 +8,11 @@ export async function createContext(event: RequestEvent) {
 	};
 }
 
+export type Res<T = unknown> = {
+	success: boolean;
+	error?: string;
+} & Partial<T>;
+
 export type Context = inferAsyncReturnType<typeof createContext>;
 
 export const t = initTRPC.context<Context>().create();
