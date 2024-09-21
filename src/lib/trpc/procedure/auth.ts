@@ -53,8 +53,9 @@ export const auth = t.router({
 			const session = await lucia.createSession(user.id, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
 
-			ctx.setHeaders({
-				'Set-Cookie': sessionCookie.serialize()
+			ctx.cookies.set(sessionCookie.name, sessionCookie.value, {
+				path: '/',
+				...sessionCookie.attributes
 			});
 
 			return {

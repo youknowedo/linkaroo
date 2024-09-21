@@ -22,9 +22,9 @@
 			password
 		});
 
-		if (!success) return alert(error); // TODO: Toast
-
-		goto('/dashboard');
+		if (!success)
+			return alert(error); // TODO: Toast
+		else goto('/dashboard');
 	};
 </script>
 
