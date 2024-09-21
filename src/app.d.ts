@@ -15,4 +15,15 @@ declare global {
 	}
 }
 
-export {};
+export type WebsiteStats = {
+	visits: Stat;
+	visitors: Stat;
+	views: Stat;
+	visitDuration: Stat;
+	bounceRate: Stat;
+};
+
+export type Stat = {
+	value: number;
+	prev: number;
+};

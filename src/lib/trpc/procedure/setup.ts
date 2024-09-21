@@ -70,7 +70,8 @@ export const setup = t.procedure
 			id: generateIdFromEntropySize(10),
 			name: websiteName,
 			domain,
-			umamiId: data.id
+			umamiId: data.id,
+			ownerId: userId
 		});
 
 		return {

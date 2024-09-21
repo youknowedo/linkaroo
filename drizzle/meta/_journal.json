@@ -22,6 +22,13 @@
       "when": 1726934898072,
       "tag": "0002_stiff_paibok",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1726936138710,
+      "tag": "0003_high_princess_powerful",
+      "breakpoints": true
     }
   ]
 }
