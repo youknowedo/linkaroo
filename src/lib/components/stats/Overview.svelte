@@ -3,17 +3,113 @@
 	import { trpc } from '$lib/trpc/client';
 	import { onMount } from 'svelte';
 	import type { WebsiteStats } from '../../../app';
+	import * as Select from '../ui/select';
+	import Separator from '../ui/separator/separator.svelte';
 	import { Skeleton } from '../ui/skeleton';
 
 	let overview: WebsiteStats | null = null;
 
-	const camelCaseToWords = (s: string) => {
-		const result = s.replace(/([A-Z])/g, ' $1');
-		return result.charAt(0).toUpperCase() + result.slice(1);
+	type Range = {
+		from: number;
+		to: number;
 	};
+	type SelectItem =
+		| {
+				label: string;
+				value: Range;
+		  }
+		| undefined;
+
+	const ranges: SelectItem[] = [
+		{
+			label: 'Today',
+			value: {
+				from: new Date(new Date().setHours(0, 0, 0, 0)).getTime(),
+				to: Date.now()
+			}
+		},
+		{
+			label: 'Last 24 hours',
+			value: {
+				from: new Date(Date.now() - 24 * 60 * 60 * 1000).getTime(),
+				to: Date.now()
+			}
+		},
+		undefined,
+		{
+			label: 'This Week',
+			value: {
+				from: new Date(
+					new Date(
+						new Date().setDate(new Date().getDate() - ((new Date().getDay() + 1) % 7))
+					).setHours(0, 0, 0, 0)
+				).getTime(),
+				to: Date.now()
+			}
+		},
+		{
+			label: 'Last 7 Days',
+			value: {
+				from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime(),
+				to: Date.now()
+			}
+		},
+		undefined,
+		{
+			label: 'This Month',
+			value: {
+				from: new Date(
+					new Date(new Date().getFullYear(), new Date().getMonth(), 1).setHours(0, 0, 0, 0)
+				).getTime(),
+				to: Date.now()
+			}
+		},
+		{
+			label: 'Last 30 Days',
+			value: {
+				from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).getTime(),
+				to: Date.now()
+			}
+		},
+		{
+			label: 'Last 90 Days',
+			value: {
+				from: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).getTime(),
+				to: Date.now()
+			}
+		},
+		undefined,
+		{
+			label: 'This Year',
+			value: {
+				from: new Date(new Date().getFullYear(), 0, 1).getTime(),
+				to: Date.now()
+			}
+		},
+		{
+			label: 'Last 6 Months',
+			value: {
+				from: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).getTime(),
+				to: Date.now()
+			}
+		},
+		{
+			label: 'Last 12 Months',
+			value: {
+				from: new Date(Date.now() - 12 * 30 * 24 * 60 * 60 * 1000).getTime(),
+				to: Date.now()
+			}
+		}
+	];
+	console.log(ranges);
+
+	let selectedRange: SelectItem = ranges[0];
 
 	onMount(async () => {
-		const { success, error, stats } = await trpc($page).analytics.overview.query();
+		const { success, error, stats } = await trpc($page).analytics.overview.query({
+			from: selectedRange?.value.from,
+			to: selectedRange?.value.to
+		});
 
 		if (!success) return console.error('Failed to fetch analytics overview', error);
 
@@ -110,7 +206,38 @@
 		</div>
 	</div>
 
-	<div></div>
+	<div class="flex items-center justify-end">
+		<Select.Root
+			bind:selected={selectedRange}
+			onSelectedChange={async () => {
+				console.log(selectedRange);
+				overview = null;
+
+				const { success, error, stats } = await trpc($page).analytics.overview.query({
+					from: selectedRange?.value.from,
+					to: selectedRange?.value.to
+				});
+				if (!success) return console.error('Failed to fetch analytics overview', error);
+
+				overview = stats ?? null;
+			}}
+		>
+			<Select.Trigger class="w-[180px]">
+				<Select.Value />
+			</Select.Trigger>
+			<Select.Content>
+				{#each ranges as range}
+					{#if range}
+						<Select.Item value={range.value}>
+							{range.label}
+						</Select.Item>
+					{:else}
+						<Separator />
+					{/if}
+				{/each}
+			</Select.Content>
+		</Select.Root>
+	</div>
 </div>
 
 <style>
