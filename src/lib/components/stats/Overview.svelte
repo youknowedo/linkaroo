@@ -28,6 +28,8 @@
 			<p>
 				{#if overview}
 					{overview.views.value}
+				{:else}
+					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
@@ -43,6 +45,8 @@
 			<p>
 				{#if overview}
 					{overview.views.value}
+				{:else}
+					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
@@ -58,6 +62,8 @@
 			<p>
 				{#if overview}
 					{overview.views.value}
+				{:else}
+					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
@@ -73,6 +79,8 @@
 			<p>
 				{#if overview}
 					{overview.views.value}%
+				{:else}
+					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
@@ -88,6 +96,8 @@
 			<p>
 				{#if overview}
 					{overview.views.value}s
+				{:else}
+					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
@@ -105,7 +115,7 @@
 
 <style>
 	.stat {
-		@apply flex flex-col items-start justify-center gap-2;
+		@apply flex flex-col items-start gap-3;
 	}
 	.stat > h4 {
 		@apply whitespace-nowrap font-bold text-muted-foreground;
