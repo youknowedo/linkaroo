@@ -1,14 +1,11 @@
 <script lang="ts">
-	let className = '';
-	export { className as class };
-
 	export let href: string;
 	export let heading: string;
 	export let image: string | undefined = undefined;
 	export let description: string | undefined = undefined;
 </script>
 
-<a {href} class={className}>
+<a {href} class="link">
 	<div>
 		{#if image}
 			<img src={image} alt="favicon" />

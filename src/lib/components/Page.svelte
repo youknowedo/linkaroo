@@ -14,21 +14,21 @@
 
 <div id="page" class={styles ? '' : 'default'}>
 	{#each builder.blocks as block}
-		{#if block.class === 'profile'}
-			<Profile {...block} />
-		{:else if block.class === 'heading'}
-			<Heading {...block} />
-		{:else if block.class === 'paragraph'}
-			<Paragraph {...block} />
-		{:else if block.class === 'link'}
-			<Link {...block} />
-		{:else if block.class === 'image'}
-			{#if block.href}
-				<a href={block.href}>
-					<Image {...block} />
+		{#if block.type === 'profile'}
+			<Profile {...block.data} />
+		{:else if block.type === 'heading'}
+			<Heading {...block.data} />
+		{:else if block.type === 'paragraph'}
+			<Paragraph {...block.data} />
+		{:else if block.type === 'link'}
+			<Link {...block.data} />
+		{:else if block.type === 'image'}
+			{#if block.data.href}
+				<a href={block.data.href}>
+					<Image {...block.data} />
 				</a>
 			{:else}
-				<Image {...block} />
+				<Image {...block.data} />
 			{/if}
 		{/if}
 	{/each}

@@ -1,34 +1,54 @@
 export type Block =
 	| {
-			class: 'profile';
-			name: string;
-			image: string;
-			description: string;
+			type: 'profile';
+			data: Profile;
 	  }
 	| {
-			class: 'heading';
-			level: 1 | 2 | 3 | 4 | 5 | 6;
-			text: string;
+			type: 'heading';
+			data: Heading;
 	  }
 	| {
-			class: 'paragraph';
-			text: string;
+			type: 'paragraph';
+			data: Paragraph;
 	  }
 	| {
-			class: 'link';
-			href: string;
-			heading: string;
-			image?: string;
-			description?: string;
+			type: 'link';
+			data: Link;
 	  }
 	| {
-			class: 'image';
-			src: string;
-			alt: string;
-			height: number;
-			text: string | undefined;
-			href: string | undefined;
+			type: 'image';
+			data: Image;
 	  };
+
+type Profile = {
+	name: string;
+	image: string;
+	description: string;
+};
+
+type Heading = {
+	level?: 1 | 2 | 3 | 4 | 5 | 6;
+	text: string;
+};
+
+type Paragraph = {
+	text: string;
+};
+
+type Link = {
+	href: string;
+	heading: string;
+	image?: string;
+	description?: string;
+};
+
+type Image = {
+	src: string;
+	alt: string;
+	height?: number;
+	text?: string | undefined;
+	href?: string | undefined;
+};
 
 export class Builder {
 	blocks: Block[];
@@ -42,19 +62,19 @@ export class Builder {
 		return this;
 	}
 
-	addProfile(name: string, image: string, description: string) {
-		return this.addBlock({ class: 'profile', name, image, description });
+	addProfile(data: Profile) {
+		return this.addBlock({ type: 'profile', data });
 	}
-	addHeading(text: string, level: 1 | 2 | 3 | 4 | 5 | 6 = 3) {
-		return this.addBlock({ class: 'heading', text, level });
+	addHeading(data: Heading) {
+		return this.addBlock({ type: 'heading', data });
 	}
-	addParagraph(text: string) {
-		return this.addBlock({ class: 'paragraph', text });
+	addParagraph(data: Paragraph) {
+		return this.addBlock({ type: 'paragraph', data });
 	}
-	addLink(href: string, heading: string, image?: string, description?: string) {
-		return this.addBlock({ class: 'link', href, heading, image, description });
+	addLink(data: Link) {
+		return this.addBlock({ type: 'link', data });
 	}
-	addImage(src: string, alt: string, href?: string, text?: string, height: number = 300) {
-		return this.addBlock({ class: 'image', src, alt, height, text, href });
+	addImage(data: Image) {
+		return this.addBlock({ type: 'image', data });
 	}
 }

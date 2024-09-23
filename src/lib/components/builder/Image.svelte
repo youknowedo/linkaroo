@@ -1,14 +1,12 @@
 <script lang="ts">
-	let className = '';
-	export { className as class };
+	export let height: number = 300;
+	export let text: string | undefined = undefined;
 
-	export let height: number;
 	export let src: string;
 	export let alt: string;
-	export let text: string | undefined;
 </script>
 
-<div class={className}>
+<div class="image">
 	<img {src} {alt} style="height: {height}px;" />
 
 	{#if text}

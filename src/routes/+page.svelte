@@ -7,12 +7,40 @@
 
 <Page
 	builder={new Builder()
-		.addProfile('Sigfredo', drums, "Hello I'm Sigfredo, yeehaaw")
-		.addLink('https://google.com', "It's a link", undefined, 'tf is this link bro')
-		.addLink('https://google.com', "It's another link")
-		.addImage(drums, 'Drummer boi', 'https://spotofy.com', 'Drummer Album')
-		.addHeading('Heading')
-		.addParagraph(
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, quidem ullam sint aliquid esse assumenda quibusdam nemo libero non et a possimus? Quo ratione officiis odit quaerat eius, maiores culpa.'
-		)}
+		.addProfile({
+			name: 'John Doe',
+			image: drums,
+			description:
+				'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, quidem ullam sint aliquid esse assumenda quibusdam nemo libero non et a possimus?'
+		})
+		.addLink({
+			href: 'https://google.com',
+			heading: "It's a link",
+			description: 'tf is this link'
+		})
+		.addLink({
+			href: 'https://google.com',
+			heading: "It's another link"
+		})
+		.addImage({
+			src: drums,
+			alt: 'Drums',
+			text: 'Drums are cool',
+			height: 300
+		})
+		.addHeading({
+			text: 'Hello, world!'
+		})
+		.addParagraph({
+			text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, quidem ullam sint aliquid esse assumenda quibusdam nemo libero non et a possimus?'
+		})
+		.addLink({
+			href: 'https://google.com',
+			heading: "It's a link",
+			description: 'tf is this link'
+		})
+		.addLink({
+			href: 'https://google.com',
+			heading: "It's another link"
+		})}
 />
