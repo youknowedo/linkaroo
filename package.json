@@ -48,5 +48,10 @@
     "vite": "^5.0.3",
     "zod": "^3.23.8"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "postcss": "^8.4.47",
+    "postcss-apply": "^0.12.0",
+    "postcss-nested": "^6.2.0"
+  }
 }

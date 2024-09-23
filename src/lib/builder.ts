@@ -1,30 +1,33 @@
 export type Block =
 	| {
-			type: 'profile';
+			class: 'profile';
 			name: string;
 			image: string;
 			description: string;
 	  }
 	| {
-			type: 'heading';
+			class: 'heading';
 			level: 1 | 2 | 3 | 4 | 5 | 6;
 			text: string;
 	  }
 	| {
-			type: 'paragraph';
+			class: 'paragraph';
 			text: string;
 	  }
 	| {
-			type: 'link';
+			class: 'link';
 			href: string;
 			heading: string;
 			image?: string;
 			description?: string;
 	  }
 	| {
-			type: 'image';
+			class: 'image';
 			src: string;
 			alt: string;
+			height: number;
+			text: string | undefined;
+			href: string | undefined;
 	  };
 
 export class Builder {
@@ -40,18 +43,18 @@ export class Builder {
 	}
 
 	addProfile(name: string, image: string, description: string) {
-		return this.addBlock({ type: 'profile', name, image, description });
+		return this.addBlock({ class: 'profile', name, image, description });
 	}
 	addHeading(text: string, level: 1 | 2 | 3 | 4 | 5 | 6 = 3) {
-		return this.addBlock({ type: 'heading', text, level });
+		return this.addBlock({ class: 'heading', text, level });
 	}
 	addParagraph(text: string) {
-		return this.addBlock({ type: 'paragraph', text });
+		return this.addBlock({ class: 'paragraph', text });
 	}
 	addLink(href: string, heading: string, image?: string, description?: string) {
-		return this.addBlock({ type: 'link', href, heading, image, description });
+		return this.addBlock({ class: 'link', href, heading, image, description });
 	}
-	addImage(src: string, alt: string) {
-		return this.addBlock({ type: 'image', src, alt });
+	addImage(src: string, alt: string, href?: string, text?: string, height: number = 300) {
+		return this.addBlock({ class: 'image', src, alt, height, text, href });
 	}
 }

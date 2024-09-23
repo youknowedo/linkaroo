@@ -1,5 +1,8 @@
 <script lang="ts">
+	let className = '';
+	export { className as class };
+
 	export let text: string;
 </script>
 
-<p>{text}</p>
+<p class={className}>{text}</p>

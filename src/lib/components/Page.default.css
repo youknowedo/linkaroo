@@ -1,0 +1,61 @@
+body:has(#page.default) {
+	@apply bg-muted;
+
+	& #page {
+		@apply container flex max-w-xl flex-col items-center gap-2 py-24 text-center;
+
+		& > .profile {
+			@apply flex flex-col items-center;
+
+			& img {
+				@apply aspect-square h-32 rounded-full object-cover;
+			}
+			& h2 {
+				@apply text-2xl font-bold;
+			}
+			& p {
+				@apply text-lg;
+			}
+		}
+
+		& > .heading {
+			@apply -mb-2 text-xl font-bold;
+		}
+
+		& > .paragraph {
+			@apply max-w-md text-sm;
+		}
+
+		/* TODO: Style img */
+		& > .link {
+			@apply w-full rounded-lg border bg-card p-2 duration-200 hover:bg-background/50;
+
+			& h4 {
+				@apply text-lg;
+			}
+			& p {
+				@apply text-xs text-muted-foreground;
+			}
+		}
+
+		& > .image,
+		& > a:has(> .image) {
+			@apply relative w-full;
+
+			& img {
+				@apply w-full rounded-lg object-cover;
+			}
+
+			& div:has(> p) {
+				@apply absolute bottom-4 left-0 right-0;
+
+				& p {
+					@apply mx-auto w-fit rounded-lg border bg-background px-8 py-3 duration-200;
+				}
+			}
+			&:hover div > p {
+				@apply bg-background/90;
+			}
+		}
+	}
+}

@@ -1,16 +1,18 @@
 <script lang="ts">
+	let className = '';
+	export { className as class };
+
 	export let href: string;
 	export let heading: string;
 	export let image: string | undefined = undefined;
 	export let description: string | undefined = undefined;
 </script>
 
-<a {href}>
+<a {href} class={className}>
 	<div>
-		<img
-			src={image ?? `https://s2.googleusercontent.com/s2/favicons?domain=${new URL(href).host}`}
-			alt="favicon"
-		/>
+		{#if image}
+			<img src={image} alt="favicon" />
+		{/if}
 
 		<div>
 			<h4>{heading}</h4>
