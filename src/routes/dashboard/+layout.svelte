@@ -10,12 +10,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Input } from '$lib/components/ui/input';
 	import * as Sheet from '$lib/components/ui/sheet';
-
-	const navItems: { name: string; href: string }[] = [
-		{ name: 'Dashboard', href: '/dashboard' },
-		{ name: 'Analytics', href: '/dashboard/analytics' },
-		{ name: 'Settings', href: '/dashboard/settings' }
-	];
+	import { navItems } from '$lib/stores';
 </script>
 
 <div class="flex min-h-screen w-full flex-col">
@@ -28,7 +23,7 @@
 				<span class="sr-only">Acme Inc</span>
 			</a>
 
-			{#each navItems as { name, href }}
+			{#each $navItems as { name, href }}
 				<a
 					{href}
 					class="transition-colors hover:text-foreground {(
@@ -57,7 +52,7 @@
 						<span class="sr-only">Acme Inc</span>
 					</a>
 
-					{#each navItems as { name, href }}
+					{#each $navItems as { name, href }}
 						<a
 							{href}
 							class="transition-colors hover:text-foreground {(
@@ -109,7 +104,7 @@
 		</div>
 	</header>
 	<main
-		class="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10"
+		class="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 px-4 md:gap-8 md:p-10"
 	>
 		<div class="container">
 			<slot />

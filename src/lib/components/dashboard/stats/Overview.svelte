@@ -3,14 +3,15 @@
 	import ChevronRight from 'lucide-svelte/icons/chevron-right';
 
 	import { page } from '$app/stores';
+	import { showCharts } from '$lib/stores';
 	import { trpc } from '$lib/trpc/client';
 	import { year } from 'drizzle-orm/mysql-core';
 	import { onMount } from 'svelte';
-	import type { WebsiteStats } from '../../../app';
-	import { Button } from '../ui/button';
-	import * as Select from '../ui/select';
-	import Separator from '../ui/separator/separator.svelte';
-	import { Skeleton } from '../ui/skeleton';
+	import type { WebsiteStats } from '../../../../app';
+	import { Button } from '../../ui/button';
+	import * as Select from '../../ui/select';
+	import Separator from '../../ui/separator/separator.svelte';
+	import { Skeleton } from '../../ui/skeleton';
 
 	type Range = {
 		from: number | (() => number);
@@ -309,6 +310,10 @@
 		</div>
 	</div>
 </div>
+
+{#if $showCharts}
+	Chart
+{/if}
 
 <style>
 	.stat {
