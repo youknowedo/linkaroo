@@ -13,152 +13,154 @@
 	import { Skeleton } from '../ui/skeleton';
 
 	type Range = {
-		from: number;
-		to: number;
-		timeRange: number;
+		from: number | (() => number);
+		to: number | (() => number);
 	};
 	type SelectItem =
 		| {
 				label: string;
-				value: Range;
+				value: number;
 		  }
 		| undefined;
 
-	// TODO: Remove timeRange and have a calc function to calculate the time range
-	const ranges: SelectItem[] = [
+	const ranges: Range[] = [
+		// Today
 		{
-			label: 'Today',
-			value: {
-				from: new Date(new Date().setHours(0, 0, 0, 0)).getTime(),
-				to: Date.now(),
-				timeRange: 24 * 60 * 60 * 1000
-			}
+			from: new Date(new Date().setHours(0, 0, 0, 0)).getTime(),
+			to: new Date(new Date().setHours(23, 59, 59, 999)).getTime()
 		},
+		// Last 24 hours
 		{
-			label: 'Last 24 hours',
-			value: {
-				from: new Date(Date.now() - 24 * 60 * 60 * 1000).getTime(),
-				to: Date.now(),
-				timeRange: 24 * 60 * 60 * 1000
-			}
+			from: new Date(Date.now() - 24 * 60 * 60 * 1000).getTime(),
+			to: Date.now()
 		},
-		undefined,
+		// This week
 		{
-			label: 'This Week',
-			value: {
-				from: new Date(
-					new Date(
-						new Date().setDate(new Date().getDate() - ((new Date().getDay() + 1) % 7))
-					).setHours(0, 0, 0, 0)
+			from: () =>
+				new Date(
+					new Date().setDate(new Date().getDate() - new Date().getDay() + time * 7)
 				).getTime(),
-				to: Date.now(),
-				timeRange: 7 * 24 * 60 * 60 * 1000
-			}
+			to: () =>
+				new Date(
+					new Date().setDate(new Date().getDate() - new Date().getDay() + time * 7 + 6)
+				).getTime()
 		},
+		// Last 7 days
 		{
-			label: 'Last 7 Days',
-			value: {
-				from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime(),
-				to: Date.now(),
-				timeRange: 7 * 24 * 60 * 60 * 1000
-			}
+			from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime(),
+			to: Date.now()
 		},
-		undefined,
+		// This month
 		{
-			label: 'This Month',
-			value: {
-				from: new Date(
-					new Date(new Date().getFullYear(), new Date().getMonth(), 1).setHours(0, 0, 0, 0)
-				).getTime(),
-				to: Date.now(),
-				timeRange: 30 * 24 * 60 * 60 * 1000
-			}
+			from: () => new Date(new Date().getFullYear(), new Date().getMonth() - time, 1).getTime(),
+			to: () => new Date(new Date().getFullYear(), new Date().getMonth() - time + 1, 0).getTime()
 		},
+		// Last 30 days
 		{
-			label: 'Last 30 Days',
-			value: {
-				from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).getTime(),
-				to: Date.now(),
-				timeRange: 30 * 24 * 60 * 60 * 1000
-			}
+			from: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).getTime(),
+			to: Date.now()
 		},
+		// Last 90 days
 		{
-			label: 'Last 90 Days',
-			value: {
-				from: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).getTime(),
-				to: Date.now(),
-				timeRange: 90 * 24 * 60 * 60 * 1000
-			}
+			from: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).getTime(),
+			to: Date.now()
 		},
-		undefined,
+		// This year
 		{
-			label: 'This Year',
-			value: {
-				from: new Date(new Date().getFullYear(), 0, 1).getTime(),
-				to: Date.now(),
-				timeRange: 365 * 24 * 60 * 60 * 1000
-			}
+			from: () => new Date(new Date().getFullYear() - time, 0, 1).getTime(),
+			to: () => new Date(new Date().getFullYear() - time, 11, 31).getTime()
 		},
+		// Last 6 months
 		{
-			label: 'Last 6 Months',
-			value: {
-				from: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).getTime(),
-				to: Date.now(),
-				timeRange: 6 * 30 * 24 * 60 * 60 * 1000
-			}
+			from: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).getTime(),
+			to: Date.now()
 		},
+		// Last 12 months
 		{
-			label: 'Last 12 Months',
-			value: {
-				from: new Date(Date.now() - 12 * 30 * 24 * 60 * 60 * 1000).getTime(),
-				to: Date.now(),
-				timeRange: 12 * 30 * 24 * 60 * 60 * 1000
-			}
+			from: new Date(Date.now() - 12 * 30 * 24 * 60 * 60 * 1000).getTime(),
+			to: Date.now()
 		}
 	];
+	const items: SelectItem[] = [
+		{ label: 'Today', value: 0 },
+		{ label: 'Last 24 hours', value: 1 },
+		undefined,
+		{ label: 'This week', value: 2 },
+		{ label: 'Last 7 days', value: 3 },
+		undefined,
+		{ label: 'This month', value: 4 },
+		{ label: 'Last 30 days', value: 5 },
+		{ label: 'Last 90 days', value: 6 },
+		undefined,
+		{ label: 'This year', value: 7 },
+		{ label: 'Last 6 months', value: 8 },
+		{ label: 'Last 12 months', value: 9 }
+	];
 
-	let overview: WebsiteStats | null = null;
+	let stats: WebsiteStats | null = null;
 	let time = 0;
-	let selectedRange: SelectItem = ranges[0];
+	let selected: SelectItem = items[0];
+	let selectedRange: Range = ranges[0];
+	let originalLabel = items[0]?.label;
 
 	const onTimeChange = async () => {
-		overview = null;
+		if (!selectedRange) return;
 
-		const { success, error, stats } = await trpc($page).analytics.overview.query({
-			from: selectedRange?.value.from,
-			to: selectedRange?.value.to
+		stats = null;
+
+		const rawFrom =
+			typeof selectedRange.from === 'number' ? selectedRange.from : selectedRange.from();
+		const rawTo = typeof selectedRange.to === 'number' ? selectedRange.to : selectedRange.to();
+
+		const timeRange = rawTo - rawFrom;
+
+		const from = typeof selectedRange.from === 'number' ? rawFrom - timeRange * time : rawFrom;
+		const to = typeof selectedRange.from === 'number' ? rawTo - timeRange * time : rawTo;
+
+		const {
+			success,
+			error,
+			stats: s
+		} = await trpc($page).analytics.overview.query({
+			from,
+			to
 		});
 		if (!success) return console.error('Failed to fetch analytics overview', error);
 
-		overview = stats ?? null;
+		stats = s ?? null;
 
-		selectedRange = selectedRange && {
-			label: `${new Date(selectedRange.value.from).toLocaleDateString(undefined, {
-				day: 'numeric',
-				month: 'short',
-				year: 'numeric'
-			})} - ${new Date(selectedRange.value.to).toLocaleDateString(undefined, {
-				day: 'numeric',
-				month: 'short',
-				year: 'numeric'
-			})}`,
-			value: {
-				from: selectedRange.value.from - time * selectedRange.value.timeRange,
-				to: selectedRange.value.to - time * selectedRange.value.timeRange,
-				timeRange: selectedRange.value.timeRange
-			}
+		selected = selected && {
+			label:
+				time == 0
+					? (originalLabel ?? '')
+					: `${new Date(from).toLocaleDateString(undefined, {
+							hour: 'numeric',
+							minute: 'numeric',
+							day: 'numeric',
+							month: 'short'
+						})} - ${new Date(to).toLocaleDateString(undefined, {
+							day: 'numeric',
+							month: 'short'
+						})}`,
+			value: selected.value ?? 0
 		};
 	};
 
 	onMount(async () => {
-		const { success, error, stats } = await trpc($page).analytics.overview.query({
-			from: selectedRange?.value.from,
-			to: selectedRange?.value.to
+		if (!selectedRange) return;
+
+		const {
+			success,
+			error,
+			stats: s
+		} = await trpc($page).analytics.overview.query({
+			from: typeof selectedRange.from === 'number' ? selectedRange.from : selectedRange.from(),
+			to: typeof selectedRange.to === 'number' ? selectedRange.to : selectedRange.to()
 		});
 
 		if (!success) return console.error('Failed to fetch analytics overview', error);
 
-		overview = stats ?? null;
+		stats = s ?? null;
 	});
 </script>
 
@@ -167,85 +169,85 @@
 		<div class="stat">
 			<h4>Views</h4>
 			<p>
-				{#if overview}
-					{overview.views.value}
+				{#if stats}
+					{stats.views.value}
 				{:else}
 					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
-				{#if overview}
-					{(overview.views.prev / overview.views.value || 0 * 100) | 0}%
+				{#if stats}
+					{(stats.views.prev / stats.views.value || 0 * 100) | 0}%
 				{:else}
-					<Skeleton class="h-7 w-8" />
+					<Skeleton class="h-6 w-7" />
 				{/if}
 			</div>
 		</div>
 		<div class="stat">
 			<h4>Visits</h4>
 			<p>
-				{#if overview}
-					{overview.views.value}
+				{#if stats}
+					{stats.views.value}
 				{:else}
 					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
-				{#if overview}
-					{(overview.visits.prev / overview.visits.value || 0 * 100) | 0}%
+				{#if stats}
+					{(stats.visits.prev / stats.visits.value || 0 * 100) | 0}%
 				{:else}
-					<Skeleton class="h-7 w-8" />
+					<Skeleton class="h-6 w-7" />
 				{/if}
 			</div>
 		</div>
 		<div class="stat">
 			<h4>Visitors</h4>
 			<p>
-				{#if overview}
-					{overview.views.value}
+				{#if stats}
+					{stats.views.value}
 				{:else}
 					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
-				{#if overview}
-					{(overview.visitors.prev / overview.visitors.value || 0 * 100) | 0}%
+				{#if stats}
+					{(stats.visitors.prev / stats.visitors.value || 0 * 100) | 0}%
 				{:else}
-					<Skeleton class="h-7 w-8" />
+					<Skeleton class="h-6 w-7" />
 				{/if}
 			</div>
 		</div>
 		<div class="stat">
 			<h4>Bounce Rate</h4>
 			<p>
-				{#if overview}
-					{overview.views.value}%
+				{#if stats}
+					{stats.views.value}%
 				{:else}
 					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
-				{#if overview}
-					{(overview.bounceRate.prev / overview.bounceRate.value || 0 * 100) | 0}%
+				{#if stats}
+					{(stats.bounceRate.prev / stats.bounceRate.value || 0 * 100) | 0}%
 				{:else}
-					<Skeleton class="h-7 w-8" />
+					<Skeleton class="h-6 w-7" />
 				{/if}
 			</div>
 		</div>
 		<div class="stat">
 			<h4>Visit Duration</h4>
 			<p>
-				{#if overview}
-					{overview.views.value}s
+				{#if stats}
+					{stats.views.value}s
 				{:else}
 					<Skeleton class="h-10 w-12" />
 				{/if}
 			</p>
 			<div class="tag">
-				{#if overview}
-					{(overview.visitDuration.prev / overview.visitDuration.value || 0 * 100) | 0}%
+				{#if stats}
+					{(stats.visitDuration.prev / stats.visitDuration.value || 0 * 100) | 0}%
 				{:else}
-					<Skeleton class="h-7 w-8" />
+					<Skeleton class="h-6 w-7" />
 				{/if}
 			</div>
 		</div>
@@ -253,26 +255,37 @@
 
 	<div class="flex items-center justify-end gap-2">
 		<Select.Root
-			bind:selected={selectedRange}
-			onSelectedChange={async () => {
-				overview = null;
+			bind:selected
+			onSelectedChange={async (r) => {
+				if (!r) return;
+				selectedRange = ranges[r.value];
+				originalLabel = r.label;
 
-				const { success, error, stats } = await trpc($page).analytics.overview.query({
-					from: selectedRange && selectedRange.value.from - time * selectedRange.value.timeRange,
-					to: selectedRange && selectedRange.value.to - time * selectedRange.value.timeRange
+				if (!selectedRange) return;
+
+				stats = null;
+
+				const {
+					success,
+					error,
+					stats: s
+				} = await trpc($page).analytics.overview.query({
+					from: typeof selectedRange.from === 'number' ? selectedRange.from : selectedRange.from(),
+					to: typeof selectedRange.to === 'number' ? selectedRange.to : selectedRange.to()
 				});
 				if (!success) return console.error('Failed to fetch analytics overview', error);
 
-				overview = stats ?? null;
+				stats = s ?? null;
+				time = 0;
 			}}
 		>
 			<Select.Trigger class="w-fit min-w-[180px]">
 				<Select.Value />
 			</Select.Trigger>
 			<Select.Content>
-				{#each ranges as range}
-					{#if range}
-						<Select.Item value={range.value}>{range.label}</Select.Item>
+				{#each items as item}
+					{#if item}
+						<Select.Item value={item.value}>{item.label}</Select.Item>
 					{:else}
 						<Separator />
 					{/if}
@@ -281,12 +294,12 @@
 		</Select.Root>
 
 		<div>
-			<Button variant="secondary" class="p-2" on:click={() => (time++, onTimeChange())}>
+			<Button variant="outline" class="p-2" on:click={() => (time++, onTimeChange())}>
 				<ChevronLeft />
 			</Button>
 
 			<Button
-				variant="secondary"
+				variant="outline"
 				class="p-2"
 				disabled={time == 0}
 				on:click={() => (time--, onTimeChange())}
