@@ -1,5 +1,15 @@
 <script lang="ts">
-	export let text: string;
+	import type { Paragraph } from '$lib/builder';
+
+	export let edit: boolean;
+	export let data: Paragraph;
 </script>
 
-<p class="paragraph">{text}</p>
+<p
+	placeholder="This is a paragraph"
+	contenteditable={edit}
+	on:input={(e) => (data.text = e.currentTarget.innerText)}
+	class="paragraph"
+>
+	{data.text}
+</p>

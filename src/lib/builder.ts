@@ -20,29 +20,29 @@ export type Block =
 			data: Image;
 	  };
 
-type Profile = {
+export type Profile = {
 	name: string;
 	image: string;
-	description: string;
+	bio: string;
 };
 
-type Heading = {
+export type Heading = {
 	level?: 1 | 2 | 3 | 4 | 5 | 6;
 	text: string;
 };
 
-type Paragraph = {
+export type Paragraph = {
 	text: string;
 };
 
-type Link = {
+export type Link = {
 	href: string;
 	heading: string;
 	image?: string;
-	description?: string;
+	subtext?: string;
 };
 
-type Image = {
+export type Image = {
 	src: string;
 	alt: string;
 	height?: number;

@@ -1,18 +1,64 @@
 <script lang="ts">
-	export let level: 1 | 2 | 3 | 4 | 5 | 6 = 3;
-	export let text: string;
+	import type { Heading } from '$lib/builder';
+
+	export let edit: boolean;
+	export let data: Heading;
+
+	if (!data.level) data.level = 3;
 </script>
 
-{#if level === 1}
-	<h1 class="heading">{text}</h1>
-{:else if level === 2}
-	<h2 class="heading">{text}</h2>
-{:else if level === 3}
-	<h3 class="heading">{text}</h3>
-{:else if level === 4}
-	<h4 class="heading">{text}</h4>
-{:else if level === 5}
-	<h5 class="heading">{text}</h5>
-{:else if level === 6}
-	<h6 class="heading">{text}</h6>
+{#if data.level === 1}
+	<h1
+		placeholder="Heading text"
+		contenteditable={edit}
+		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		class="heading"
+	>
+		{data.text}
+	</h1>
+{:else if data.level === 2}
+	<h2
+		placeholder="Heading text"
+		contenteditable={edit}
+		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		class="heading"
+	>
+		{data.text}
+	</h2>
+{:else if data.level === 3}
+	<h3
+		placeholder="Heading text"
+		contenteditable={edit}
+		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		class="heading"
+	>
+		{data.text}
+	</h3>
+{:else if data.level === 4}
+	<h4
+		placeholder="Heading text"
+		contenteditable={edit}
+		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		class="heading"
+	>
+		{data.text}
+	</h4>
+{:else if data.level === 5}
+	<h5
+		placeholder="Heading text"
+		contenteditable={edit}
+		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		class="heading"
+	>
+		{data.text}
+	</h5>
+{:else if data.level === 6}
+	<h6
+		placeholder="Heading text"
+		contenteditable={edit}
+		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		class="heading"
+	>
+		{data.text}
+	</h6>
 {/if}

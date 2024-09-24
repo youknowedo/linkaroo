@@ -1,18 +1,22 @@
 <script lang="ts">
-	export let height: number = 300;
-	export let text: string | undefined = undefined;
+	import type { Image } from '$lib/builder';
 
-	export let src: string;
-	export let alt: string;
+	export let edit: boolean;
+	export let data: Image;
 </script>
 
+<!-- TODO: Edit image -->
 <div class="image">
-	<img {src} {alt} style="height: {height}px;" />
+	<img src={data.src} alt={data.alt} style="height: {data.height}px;" />
 
-	{#if text}
+	{#if edit || data.text}
 		<div>
-			<p>
-				{text}
+			<p
+				placeholder="Image text"
+				contenteditable={edit}
+				on:input={(e) => (data.text = e.currentTarget.innerText)}
+			>
+				{data.text}
 			</p>
 		</div>
 	{/if}

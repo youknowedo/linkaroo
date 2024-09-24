@@ -1,21 +1,33 @@
 <script lang="ts">
-	export let href: string;
-	export let heading: string;
-	export let image: string | undefined = undefined;
-	export let description: string | undefined = undefined;
+	import type { Link } from '$lib/builder';
+
+	export let edit: boolean;
+	export let data: Link;
 </script>
 
-<a {href} class="link">
+<a href={edit ? undefined : data.href} class="link">
 	<div>
-		{#if image}
-			<img src={image} alt="favicon" />
+		<!-- TODO: Edit image -->
+		{#if data.image}
+			<img src={data.image} alt="favicon" />
 		{/if}
 
 		<div>
-			<h4>{heading}</h4>
-			{#if description}
-				<p>{description}</p>
-			{/if}
+			<h4
+				placeholder="Link text"
+				contenteditable={edit}
+				on:input={(e) => (data.heading = e.currentTarget.innerText)}
+			>
+				{data.heading}
+			</h4>
+
+			<p
+				placeholder="Subtext"
+				contenteditable={edit}
+				on:input={(e) => (data.subtext = e.currentTarget.innerText)}
+			>
+				{data.subtext ?? ''}
+			</p>
 		</div>
 	</div>
 </a>

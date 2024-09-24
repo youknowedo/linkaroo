@@ -10,13 +10,12 @@
 		.addProfile({
 			name: 'John Doe',
 			image: drums,
-			description:
-				'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, quidem ullam sint aliquid esse assumenda quibusdam nemo libero non et a possimus?'
+			bio: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, quidem ullam sint aliquid esse assumenda quibusdam nemo libero non et a possimus?'
 		})
 		.addLink({
 			href: 'https://google.com',
 			heading: "It's a link",
-			description: 'tf is this link'
+			subtext: 'tf is this link'
 		})
 		.addLink({
 			href: 'https://google.com',
@@ -37,7 +36,7 @@
 		.addLink({
 			href: 'https://google.com',
 			heading: "It's a link",
-			description: 'tf is this link'
+			subtext: 'tf is this link'
 		})
 		.addLink({
 			href: 'https://google.com',
