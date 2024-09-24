@@ -1,72 +1,78 @@
-[contenteditable='true']:empty:not(:focus):before {
-	content: attr(placeholder);
-	color: grey;
-	font-style: italic;
-	pointer-events: none;
+[contenteditable='true'] {
+	outline: none;
+
+	&:empty:not(:focus):before {
+		content: attr(placeholder);
+		color: grey;
+		font-style: italic;
+		pointer-events: none;
+	}
 }
 
 body:has(#page.default) {
-	@apply bg-muted;
+	& :has(> #page) {
+		@apply min-h-screen bg-muted/40;
 
-	& #page {
-		@apply container flex max-w-xl flex-col items-center gap-2 py-24 text-center;
+		& #page {
+			@apply container flex max-w-xl flex-col items-center gap-2 py-24 text-center;
 
-		& > button {
-			@apply w-full cursor-auto;
+			& > button {
+				@apply w-full cursor-auto;
 
-			&:hover,
-			&.selected {
-				@apply outline outline-2 outline-red-500;
-			}
-		}
-
-		& .profile {
-			@apply flex flex-col items-center gap-2;
-
-			& img {
-				@apply aspect-square h-32 rounded-full object-cover;
-			}
-			& h2 {
-				@apply text-2xl font-bold;
-			}
-			& p {
-				@apply max-w-md text-sm;
-			}
-		}
-
-		& .heading {
-			@apply text-xl font-bold;
-		}
-
-		& .paragraph {
-			@apply mx-auto max-w-md text-sm;
-		}
-
-		/* TODO: Style img */
-		& .link {
-			@apply block w-full rounded-lg border bg-card p-2 duration-200 hover:bg-background/50;
-
-			& h4 {
-				@apply text-lg;
-			}
-			& p {
-				@apply text-xs text-muted-foreground;
-			}
-		}
-
-		& .image,
-		& > a:has(> .image) {
-			@apply relative w-full;
-
-			& img {
-				@apply w-full rounded-lg object-cover;
+				&:hover,
+				&.selected {
+					@apply outline outline-2 outline-red-500;
+				}
 			}
 
-			& div:has(> p) {
-				@apply absolute bottom-4 left-0 right-0;
+			& .profile {
+				@apply flex flex-col items-center gap-2;
 
+				& img {
+					@apply aspect-square h-32 rounded-full object-cover;
+				}
+				& h2 {
+					@apply text-2xl font-bold;
+				}
 				& p {
-					@apply mx-auto w-fit rounded-lg border bg-background px-8 py-3 duration-200;
+					@apply max-w-md text-sm;
+				}
+			}
+
+			& .heading {
+				@apply text-xl font-bold;
+			}
+
+			& .paragraph {
+				@apply mx-auto max-w-md text-sm;
+			}
+
+			/* TODO: Style img */
+			& .link {
+				@apply block w-full rounded-lg border bg-card p-2 duration-200 hover:bg-background/50;
+
+				& h4 {
+					@apply text-lg;
+				}
+				& p {
+					@apply text-xs text-muted-foreground;
+				}
+			}
+
+			& .image,
+			& > a:has(> .image) {
+				@apply relative w-full;
+
+				& img {
+					@apply w-full rounded-lg object-cover;
+				}
+
+				& div:has(> p) {
+					@apply absolute bottom-4 left-0 right-0;
+
+					& p {
+						@apply mx-auto w-fit rounded-lg border bg-background px-8 py-3 duration-200;
+					}
 				}
 			}
 		}
