@@ -3,6 +3,7 @@
 
 	export let edit: boolean;
 	export let data: Image;
+	export let onInput: (data: Image) => void;
 </script>
 
 <!-- TODO: Edit image -->
@@ -14,7 +15,7 @@
 			<p
 				placeholder="Image text"
 				contenteditable={edit}
-				on:input={(e) => (data.text = e.currentTarget.innerText)}
+				on:input={(e) => ((data.text = e.currentTarget.innerText), onInput(data))}
 			>
 				{data.text}
 			</p>

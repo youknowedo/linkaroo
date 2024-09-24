@@ -103,11 +103,7 @@
 			</DropdownMenu.Root>
 		</div>
 	</header>
-	<main
-		class="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 px-4 md:gap-8 md:p-10"
-	>
-		<div class="container">
-			<slot />
-		</div>
+	<main class="flex-1 bg-muted/40">
+		<slot />
 	</main>
 </div>

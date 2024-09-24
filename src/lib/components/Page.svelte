@@ -1,19 +1,24 @@
 <script lang="ts">
+	import type { Block as TBlock } from '$lib/builder';
+	import { blocks as b, selectedBlockIndex } from '$lib/stores';
+	import { onMount } from 'svelte';
+	import Block from './Block.svelte';
 	import './Page.default.css';
 
-	import type { Builder } from '$lib/builder';
-	import { onMount } from 'svelte';
-	import Heading from './builder/Heading.svelte';
-	import Image from './builder/Image.svelte';
-	import Link from './builder/Link.svelte';
-	import Paragraph from './builder/Paragraph.svelte';
-	import Profile from './builder/Profile.svelte';
-
-	export let builder: Builder;
+	export let blocks: TBlock[];
 	export let edit = false;
 	export let styles: string | undefined = undefined;
 
 	let styleTag: HTMLStyleElement;
+
+	const onInput = (data: TBlock['data']) => {
+		b.update((blocks) => {
+			if ($selectedBlockIndex === null) return blocks;
+
+			blocks[$selectedBlockIndex].data = data;
+			return blocks;
+		});
+	};
 
 	onMount(() => {
 		if (styles) {
@@ -29,23 +34,16 @@
 </svelte:head>
 
 <div id="page" class={styles ? '' : 'default'}>
-	{#each builder.blocks as block}
-		{#if block.type === 'profile'}
-			<Profile {edit} {...block} />
-		{:else if block.type === 'heading'}
-			<Heading {edit} {...block} />
-		{:else if block.type === 'paragraph'}
-			<Paragraph {edit} {...block} />
-		{:else if block.type === 'link'}
-			<Link {edit} {...block} />
-		{:else if block.type === 'image'}
-			{#if !edit && block.data.href}
-				<a href={block.data.href}>
-					<Image edit={false} {...block} />
-				</a>
-			{:else}
-				<Image {edit} {...block} />
-			{/if}
+	{#each blocks as block}
+		{#if edit}
+			<button
+				class={$selectedBlockIndex === $b?.findIndex((b) => block === b) ? 'selected' : ''}
+				on:click={() => selectedBlockIndex.set($b?.findIndex((b) => block === b))}
+			>
+				<Block {onInput} {edit} {block} />
+			</button>
+		{:else}
+			<Block {onInput} {edit} {block} />
 		{/if}
 	{/each}
 </div>

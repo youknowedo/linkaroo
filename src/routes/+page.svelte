@@ -6,7 +6,7 @@
 </script>
 
 <Page
-	builder={new Builder()
+	blocks={new Builder()
 		.addProfile({
 			name: 'John Doe',
 			image: drums,
@@ -41,5 +41,5 @@
 		.addLink({
 			href: 'https://google.com',
 			heading: "It's another link"
-		})}
+		}).blocks}
 />

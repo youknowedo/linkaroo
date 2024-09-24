@@ -1,8 +1,10 @@
 <script lang="ts">
 	import type { Heading } from '$lib/builder';
+	import { selectedBlockIndex } from '$lib/stores';
 
 	export let edit: boolean;
 	export let data: Heading;
+	export let onInput: (data: Heading) => void;
 
 	if (!data.level) data.level = 3;
 </script>
@@ -11,7 +13,7 @@
 	<h1
 		placeholder="Heading text"
 		contenteditable={edit}
-		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		on:input={(e) => ((data.text = e.currentTarget.innerText), onInput(data))}
 		class="heading"
 	>
 		{data.text}
@@ -20,7 +22,7 @@
 	<h2
 		placeholder="Heading text"
 		contenteditable={edit}
-		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		on:input={(e) => ((data.text = e.currentTarget.innerText), onInput(data))}
 		class="heading"
 	>
 		{data.text}
@@ -29,7 +31,7 @@
 	<h3
 		placeholder="Heading text"
 		contenteditable={edit}
-		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		on:input={(e) => ((data.text = e.currentTarget.innerText), onInput(data))}
 		class="heading"
 	>
 		{data.text}
@@ -38,7 +40,7 @@
 	<h4
 		placeholder="Heading text"
 		contenteditable={edit}
-		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		on:input={(e) => ((data.text = e.currentTarget.innerText), onInput(data))}
 		class="heading"
 	>
 		{data.text}
@@ -47,7 +49,7 @@
 	<h5
 		placeholder="Heading text"
 		contenteditable={edit}
-		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		on:input={(e) => ((data.text = e.currentTarget.innerText), onInput(data))}
 		class="heading"
 	>
 		{data.text}
@@ -56,7 +58,7 @@
 	<h6
 		placeholder="Heading text"
 		contenteditable={edit}
-		on:input={(e) => (data.text = e.currentTarget.innerText)}
+		on:input={(e) => ((data.text = e.currentTarget.innerText), onInput(data))}
 		class="heading"
 	>
 		{data.text}

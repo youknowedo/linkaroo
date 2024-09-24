@@ -6,16 +6,18 @@
 	import ChartArea from 'lucide-svelte/icons/chart-area';
 </script>
 
-<Header>
-	<div>
-		<Button
-			class="p-2 {$showCharts ? '-m-px' : ''}"
-			variant={$showCharts ? 'outline' : 'default'}
-			on:click={() => showCharts.update((s) => !s)}
-		>
-			<ChartArea />
-		</Button>
-	</div>
-</Header>
+<div class="container md:p-10">
+	<Header>
+		<div>
+			<Button
+				class="p-2 {$showCharts ? '-m-px' : ''}"
+				variant={$showCharts ? 'outline' : 'default'}
+				on:click={() => showCharts.update((s) => !s)}
+			>
+				<ChartArea />
+			</Button>
+		</div>
+	</Header>
 
-<Overview />
+	<Overview />
+</div>
