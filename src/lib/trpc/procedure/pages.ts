@@ -65,8 +65,8 @@ export const pages = t.router({
 					error: "No user found"
 				};
 
-			const { name, slug } = input;
-			let { siteId } = input;
+			const { name } = input;
+			let { siteId, slug } = input;
 
 			if (!siteId) {
 				// TODO: Make non owners of the site be able to view
@@ -79,6 +79,8 @@ export const pages = t.router({
 
 				siteId = site.id;
 			}
+
+			slug = encodeURIComponent(slug.toLowerCase().replace(/ /g, "-"));
 
 			const id = generateIdFromEntropySize(10);
 
@@ -236,6 +238,8 @@ export const pages = t.router({
 		.input(
 			z.object({
 				id: z.string(),
+				name: z.string(),
+				slug: z.string(),
 				blocks: z.array(BlockSchema)
 			})
 		)
@@ -255,9 +259,19 @@ export const pages = t.router({
 					error: "No user found"
 				};
 
-			const { id, blocks } = input;
+			const { id, name, blocks } = input;
+			let { slug } = input;
 
-			await db.update(pagesTable).set({ blocks }).where(eq(pagesTable.id, id));
+			slug = encodeURIComponent(slug.toLowerCase().replace(/ /g, "-"));
+
+			await db
+				.update(pagesTable)
+				.set({
+					name,
+					slug,
+					blocks
+				})
+				.where(eq(pagesTable.id, id));
 
 			return {
 				success: true

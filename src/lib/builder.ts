@@ -126,10 +126,23 @@ export const blockTypes: { type: Block["type"]; icon: ComponentType }[] = [
 ] as const;
 
 export class Builder {
+	private _id: string;
+	get id() {
+		return this._id;
+	}
+
+	name: string;
+	slug: string;
 	blocks: Block[];
 
-	constructor(blocks: Block[] = []) {
+	constructor(
+		blocks: Block[] = [],
+		page: { name: string; slug: string; id: string } = { name: "", slug: "", id: "" }
+	) {
 		this.blocks = blocks;
+		this.name = page.name;
+		this.slug = page.slug;
+		this._id = page.id;
 	}
 
 	add(type: Block["type"], at?: number) {

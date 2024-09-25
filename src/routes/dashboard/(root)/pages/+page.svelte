@@ -1,30 +1,25 @@
 <script lang="ts">
-	import Plus from "lucide-svelte/icons/plus";
+	import Plus from 'lucide-svelte/icons/plus';
 
-	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
-	import Title from "$lib/components/dashboard/Title.svelte";
-	import { Button } from "$lib/components/ui/button";
-	import * as Card from "$lib/components/ui/card";
-	import * as Dialog from "$lib/components/ui/dialog";
-	import { Input } from "$lib/components/ui/input";
-	import { Label } from "$lib/components/ui/label";
-	import Skeleton from "$lib/components/ui/skeleton/skeleton.svelte";
-	import { trpc } from "$lib/trpc/client";
-	import { pgEnum } from "drizzle-orm/pg-core";
-	import { onMount } from "svelte";
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import Title from '$lib/components/dashboard/Title.svelte';
+	import { Button } from '$lib/components/ui/button';
+	import * as Card from '$lib/components/ui/card';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import { Input } from '$lib/components/ui/input';
+	import { Label } from '$lib/components/ui/label';
+	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+	import { trpc } from '$lib/trpc/client';
+	import type { TPage } from '$lib/trpc/procedure/pages';
+	import { onMount } from 'svelte';
 
-	type Page = Exclude<
-		Awaited<ReturnType<ReturnType<typeof trpc>["pages"]["multiple"]["query"]>>["pages"],
-		undefined
-	>[number];
-
-	let pages: Page[] | undefined = undefined;
+	let pages: TPage[] | undefined = undefined;
 
 	let dialogOpen = false;
-	let newPage: Omit<Page, "id"> = {
-		name: "",
-		slug: "",
+	let newPage: Omit<Omit<TPage, 'id'>, 'siteId'> = {
+		name: '',
+		slug: '',
 		blocks: []
 	};
 
@@ -38,6 +33,12 @@
 
 	const deletePage = async (id: string) => {
 		await trpc($page).pages.delete.mutate({ id });
+
+		const { success, pages: p, error } = await trpc($page).pages.multiple.query();
+
+		if (success) {
+			pages = p;
+		} else console.log(error);
 	};
 </script>
 
@@ -57,7 +58,15 @@
 					</Dialog.Header>
 
 					<Label for="path">Slug</Label>
-					<Input id="path" type="text" bind:value={newPage.slug} />
+					<Input
+						id="path"
+						type="text"
+						bind:value={newPage.slug}
+						on:focusout={(e) =>
+							(e.currentTarget.value = encodeURIComponent(
+								e.currentTarget.value.toLowerCase().replace(/ /g, '-')
+							))}
+					/>
 					<Label for="name">Name</Label>
 					<Input id="name" type="text" bind:value={newPage.name} />
 
@@ -69,10 +78,16 @@
 
 								if (success) {
 									newPage = {
-										name: "",
-										slug: "",
+										name: '',
+										slug: '',
 										blocks: []
 									};
+
+									const { success, pages: p, error } = await trpc($page).pages.multiple.query();
+
+									if (success) {
+										pages = p;
+									} else console.log(error);
 								} else console.log(error);
 							}}>Create</Button
 						>
@@ -95,8 +110,8 @@
 						</Card.Title>
 
 						<div>
-							<Button variant="outline" on:click={() => goto("pages/" + page.slug)}>Edit</Button>
-							{#if page.slug !== "home"}
+							<Button variant="outline" on:click={() => goto('pages/' + page.slug)}>Edit</Button>
+							{#if page.slug !== 'home'}
 								<Button variant="destructive" on:click={() => deletePage(page.id)}>Delete</Button>
 							{/if}
 						</div>

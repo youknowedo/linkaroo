@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { pushState } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { Builder } from '$lib/builder';
 	import HeadingPanel from '$lib/components/dashboard/edit/panels/HeadingPanel.svelte';
@@ -19,9 +20,6 @@
 	import type { InferSelectModel } from 'drizzle-orm';
 	import { onMount } from 'svelte';
 
-	let pageId: string;
-	let currentPage: TPage;
-
 	$: selectedBlock = $selectedBlockId !== null ? $builder.find($selectedBlockId) : undefined;
 
 	onMount(async () => {
@@ -34,19 +32,29 @@
 		});
 
 		if (success && p) {
-			currentPage = p;
-			builder.set(new Builder(p.blocks));
+			builder.set(
+				new Builder(p.blocks, {
+					id: p.id,
+					name: p.name,
+					slug: p.slug
+				})
+			);
 		} else console.error(error);
 	});
 </script>
 
 <Header>
 	<Button
-		on:click={async () =>
+		on:click={async () => {
 			await trpc($page).pages.update.mutate({
-				id: pageId,
+				id: $builder.id,
+				name: $builder.name,
+				slug: $builder.slug,
 				blocks: $builder.blocks
-			})}
+			});
+
+			pushState('/dashboard/pages/' + $builder.slug, { replace: true });
+		}}
 	>
 		Save
 	</Button>
@@ -54,13 +62,10 @@
 
 <div class="h-[calc(100vh-4rem)]">
 	<Resizable.PaneGroup direction="horizontal">
-		<Resizable.Pane
-			class="flex h-full w-64 flex-col gap-2 border-r bg-background p-4"
-			defaultSize={25}
-		>
+		<Resizable.Pane class="flex h-full w-64 flex-col bg-background p-4" defaultSize={25}>
 			<div class="flex h-full flex-col justify-between">
 				{#if selectedBlock}
-					<div>
+					<div class="flex flex-col gap-2">
 						<h3 class="text-lg font-bold">
 							{selectedBlock.type.charAt(0).toUpperCase()}{selectedBlock.type.slice(1)}
 						</h3>
@@ -87,29 +92,39 @@
 					>
 						Delete
 					</Button>
-				{:else if currentPage}
-					<div>
-						<h3 class="text-lg font-bold">{currentPage.name}</h3>
+				{:else if $builder.name && $builder.slug}
+					<div class="flex flex-col gap-2">
+						<h3 class="text-lg font-bold">{$builder.name}</h3>
 
 						<Label for="name">Name</Label>
 						<Input
 							id="name"
 							type="text"
-							bind:value={currentPage.name}
-							on:input={(e) => {
-								// TODO: Update page name
-							}}
+							bind:value={$builder.name}
+							on:input={(e) =>
+								builder.update((b) => {
+									b.name = e.currentTarget.value;
+									return b;
+								})}
 						/>
-						<Label for="slug">Slug</Label>
-						<Input
-							id="slug"
-							type="text"
-							disabled={currentPage.slug === 'home'}
-							bind:value={currentPage.slug}
-							on:input={(e) => {
-								// TODO: Update page slug
-							}}
-						/>
+
+						{#if $builder.slug !== 'home'}
+							<Label for="slug">Slug</Label>
+							<Input
+								id="slug"
+								type="text"
+								bind:value={$builder.slug}
+								on:input={(e) =>
+									builder.update((b) => {
+										b.slug = e.currentTarget.value;
+										return b;
+									})}
+								on:focusout={(e) =>
+									(e.currentTarget.value = encodeURIComponent(
+										e.currentTarget.value.toLowerCase().replace(/ /g, '-')
+									))}
+							/>
+						{/if}
 					</div>
 				{/if}
 			</div>
