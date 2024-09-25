@@ -2,29 +2,106 @@ import { generateIdFromEntropySize } from "lucia";
 import { Heading as H, Image as I, Link as L, Pilcrow as P, User as U } from "lucide-svelte";
 
 import type { ComponentType } from "svelte";
+import { z } from "zod";
 
-export type Block = { _id: string; id?: string } & (
-	| {
-			type: "profile";
-			data: Profile;
-	  }
-	| {
-			type: "heading";
-			data: Heading;
-	  }
-	| {
-			type: "paragraph";
-			data: Paragraph;
-	  }
-	| {
-			type: "link";
-			data: Link;
-	  }
-	| {
-			type: "image";
-			data: Image;
-	  }
-);
+export const ProfileSchema = z.object({
+	name: z.string(),
+	image: z.string(),
+	bio: z.string()
+});
+export type Profile = z.infer<typeof ProfileSchema>;
+export const isProfile = (data: unknown): data is Profile => {
+	if (typeof data === "object" && data !== null) {
+		return "name" in data && "image" in data && "bio" in data;
+	}
+	return false;
+};
+
+export const HeadingSchema = z.object({
+	level: z.number().optional(),
+	text: z.string()
+});
+export type Heading = z.infer<typeof HeadingSchema>;
+export const isHeading = (data: unknown): data is H => {
+	if (typeof data === "object" && data !== null) {
+		return "text" in data;
+	}
+	return false;
+};
+
+export const ParagraphSchema = z.object({
+	text: z.string()
+});
+export type Paragraph = z.infer<typeof ParagraphSchema>;
+export const isParagraph = (data: unknown): data is Paragraph => {
+	if (typeof data === "object" && data !== null) {
+		return "text" in data;
+	}
+	return false;
+};
+
+export const LinkSchema = z.object({
+	href: z.string(),
+	heading: z.string(),
+	image: z.string().optional(),
+	subtext: z.string().optional()
+});
+export type Link = z.infer<typeof LinkSchema>;
+export const isLink = (data: unknown): data is L => {
+	if (typeof data === "object" && data !== null) {
+		return "href" in data && "heading" in data;
+	}
+	return false;
+};
+
+export const ImageSchema = z.object({
+	src: z.string(),
+	alt: z.string(),
+	height: z.number().optional(),
+	text: z.string().optional(),
+	href: z.string().optional()
+});
+export type Image = z.infer<typeof ImageSchema>;
+export const isImage = (data: unknown): data is I => {
+	if (typeof data === "object" && data !== null) {
+		return "src" in data && "alt" in data;
+	}
+	return false;
+};
+
+export const BlockSchema = z.union([
+	z.object({
+		_id: z.string(),
+		id: z.string().optional(),
+		type: z.literal("profile"),
+		data: ProfileSchema
+	}),
+	z.object({
+		_id: z.string(),
+		id: z.string().optional(),
+		type: z.literal("heading"),
+		data: HeadingSchema
+	}),
+	z.object({
+		_id: z.string(),
+		id: z.string().optional(),
+		type: z.literal("paragraph"),
+		data: ParagraphSchema
+	}),
+	z.object({
+		_id: z.string(),
+		id: z.string().optional(),
+		type: z.literal("link"),
+		data: LinkSchema
+	}),
+	z.object({
+		_id: z.string(),
+		id: z.string().optional(),
+		type: z.literal("image"),
+		data: ImageSchema
+	})
+]);
+export type Block = z.infer<typeof BlockSchema>;
 export const blockTypes: { type: Block["type"]; icon: ComponentType }[] = [
 	{
 		type: "profile",
@@ -47,66 +124,6 @@ export const blockTypes: { type: Block["type"]; icon: ComponentType }[] = [
 		icon: I
 	}
 ] as const;
-
-export type Profile = {
-	name: string;
-	image: string;
-	bio: string;
-};
-export const isProfile = (data: unknown): data is Profile => {
-	if (typeof data === "object" && data !== null) {
-		return "name" in data && "image" in data && "bio" in data;
-	}
-	return false;
-};
-
-export type Heading = {
-	level?: 1 | 2 | 3 | 4 | 5 | 6;
-	text: string;
-};
-export const isHeading = (data: unknown): data is H => {
-	if (typeof data === "object" && data !== null) {
-		return "text" in data;
-	}
-	return false;
-};
-
-export type Paragraph = {
-	text: string;
-};
-export const isParagraph = (data: unknown): data is Paragraph => {
-	if (typeof data === "object" && data !== null) {
-		return "text" in data;
-	}
-	return false;
-};
-
-export type Link = {
-	href: string;
-	heading: string;
-	image?: string;
-	subtext?: string;
-};
-export const isLink = (data: unknown): data is L => {
-	if (typeof data === "object" && data !== null) {
-		return "href" in data && "heading" in data;
-	}
-	return false;
-};
-
-export type Image = {
-	src: string;
-	alt: string;
-	height?: number;
-	text?: string | undefined;
-	href?: string | undefined;
-};
-export const isImage = (data: unknown): data is I => {
-	if (typeof data === "object" && data !== null) {
-		return "src" in data && "alt" in data;
-	}
-	return false;
-};
 
 export class Builder {
 	blocks: Block[];

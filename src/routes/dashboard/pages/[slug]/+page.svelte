@@ -9,12 +9,38 @@
 	import * as Resizable from "$lib/components/ui/resizable";
 	import { builder, selectedBlockId } from "$lib/stores";
 	import { trpc } from "$lib/trpc/client";
+	import { onMount } from "svelte";
+
+	let pageId: string;
 
 	$: selectedBlock = $selectedBlockId !== null ? $builder.find($selectedBlockId) : undefined;
+
+	onMount(async () => {
+		const {
+			success,
+			error,
+			page: p
+		} = await trpc($page).pages.single.query({
+			slug: $page.params.slug
+		});
+
+		if (success && p) {
+			pageId = p.id;
+			builder.set(new Builder(p.blocks));
+		} else console.error(error);
+	});
 </script>
 
 <Header>
-	<Button>Save</Button>
+	<Button
+		on:click={async () =>
+			await trpc($page).pages.update.mutate({
+				id: pageId,
+				blocks: $builder.blocks
+			})}
+	>
+		Save
+	</Button>
 </Header>
 
 <div class="h-[calc(100vh-4rem)]">

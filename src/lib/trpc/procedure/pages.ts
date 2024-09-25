@@ -1,9 +1,9 @@
-import type { Block } from "$lib/builder";
+import { BlockSchema, type Block } from "$lib/builder";
 import { lucia } from "$lib/server/auth";
 import { db } from "$lib/server/db/client";
 import { pagesTable, sitesTable } from "$lib/server/db/schema";
 import { t, type Res } from "$lib/trpc";
-import { eq } from "drizzle-orm";
+import { eq, type InferSelectModel } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 import { z } from "zod";
 
@@ -169,6 +169,108 @@ export const pages = t.router({
 				};
 			}
 		),
+	single: t.procedure
+		.input(
+			z.union([
+				z.object({
+					id: z.string(),
+					siteId: z.string().optional()
+				}),
+				z.object({
+					slug: z.string(),
+					siteId: z.string().optional()
+				})
+			])
+		)
+		.query(
+			async ({
+				ctx,
+				input
+			}): Promise<
+				Res<{
+					page: {
+						id: string;
+						name: string;
+						slug: string;
+						blocks: Block[];
+					};
+				}>
+			> => {
+				const sessionId = ctx.cookies.get(lucia.sessionCookieName);
+				if (!sessionId)
+					return {
+						success: false,
+						error: "No session found"
+					};
+
+				const { user } = await lucia.validateSession(sessionId);
+
+				if (!user)
+					return {
+						success: false,
+						error: "No user found"
+					};
+
+				let siteId = input?.siteId;
+
+				if (!siteId) {
+					// TODO: Make non owners of the site be able to view
+					const site = (
+						await db
+							.select({ id: sitesTable.umamiId })
+							.from(sitesTable)
+							.where(eq(sitesTable.ownerId, user.id))
+					)[0];
+
+					siteId = site.id;
+				}
+
+				let page: InferSelectModel<typeof pagesTable>;
+				if ("id" in input)
+					page = (await db.select().from(pagesTable).where(eq(pagesTable.id, input.id)))[0];
+				else page = (await db.select().from(pagesTable).where(eq(pagesTable.slug, input.slug)))[0];
+
+				return {
+					success: true,
+					page: {
+						...page,
+						blocks: page.blocks as Block[]
+					}
+				};
+			}
+		),
+
+	update: t.procedure
+		.input(
+			z.object({
+				id: z.string(),
+				blocks: z.array(BlockSchema)
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			const sessionId = ctx.cookies.get(lucia.sessionCookieName);
+			if (!sessionId)
+				return {
+					success: false,
+					error: "No session found"
+				};
+
+			const { user } = await lucia.validateSession(sessionId);
+
+			if (!user)
+				return {
+					success: false,
+					error: "No user found"
+				};
+
+			const { id, blocks } = input;
+
+			await db.update(pagesTable).set({ blocks }).where(eq(pagesTable.id, id));
+
+			return {
+				success: true
+			};
+		}),
 	delete: t.procedure
 		.input(
 			z.object({
