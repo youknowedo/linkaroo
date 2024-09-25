@@ -1,5 +1,5 @@
 <script>
-	import Header from "$lib/components/dashboard/Header.svelte";
+	import Title from "$lib/components/dashboard/Title.svelte";
 	import Overview from "$lib/components/dashboard/stats/Overview.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { showCharts } from "$lib/stores";
@@ -7,7 +7,7 @@
 </script>
 
 <div class="container max-w-[calc(100vw-4rem)] md:p-10">
-	<Header>
+	<Title>
 		<div>
 			<Button
 				class="p-2 {$showCharts ? '-m-px' : ''}"
@@ -17,7 +17,7 @@
 				<ChartArea />
 			</Button>
 		</div>
-	</Header>
+	</Title>
 
 	<Overview />
 </div>

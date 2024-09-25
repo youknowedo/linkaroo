@@ -3,7 +3,7 @@
 
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import Header from "$lib/components/dashboard/Header.svelte";
+	import Title from "$lib/components/dashboard/Title.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import * as Dialog from "$lib/components/ui/dialog";
@@ -42,7 +42,7 @@
 </script>
 
 <div class="container max-w-[calc(100vw-4rem)] md:p-10">
-	<Header>
+	<Title>
 		<div>
 			<Dialog.Root bind:open={dialogOpen}>
 				<Dialog.Trigger>
@@ -80,7 +80,7 @@
 				</Dialog.Content>
 			</Dialog.Root>
 		</div>
-	</Header>
+	</Title>
 
 	<div class="flex flex-col gap-2">
 		{#if pages}
