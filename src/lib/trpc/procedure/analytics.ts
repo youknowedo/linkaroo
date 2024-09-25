@@ -3,9 +3,9 @@ import {
 	UMAMI_API_CLIENT_SECRET,
 	UMAMI_API_CLIENT_USER_ID
 } from "$env/static/private";
+import { db } from "$lib/db/client";
+import { sitesTable } from "$lib/db/schema";
 import { lucia } from "$lib/server/auth";
-import { db } from "$lib/server/db/client";
-import { sitesTable } from "$lib/server/db/schema";
 import { t, type Res } from "$lib/trpc";
 import { getClient } from "@umami/api-client";
 import { eq } from "drizzle-orm";

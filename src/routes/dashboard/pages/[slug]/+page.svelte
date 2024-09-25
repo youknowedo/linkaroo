@@ -1,17 +1,26 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { Builder, isHeading, isImage, isLink, isParagraph, isProfile } from '$lib/builder';
+	import { Builder } from '$lib/builder';
+	import HeadingPanel from '$lib/components/dashboard/edit/panels/HeadingPanel.svelte';
+	import ImagePanel from '$lib/components/dashboard/edit/panels/ImagePanel.svelte';
+	import LinkPanel from '$lib/components/dashboard/edit/panels/LinkPanel.svelte';
+	import ParagraphPanel from '$lib/components/dashboard/edit/panels/ParagraphPanel.svelte';
+	import ProfilePanel from '$lib/components/dashboard/edit/panels/ProfilePanel.svelte';
 	import Header from '$lib/components/dashboard/Header.svelte';
 	import Page from '$lib/components/Page.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import * as Resizable from '$lib/components/ui/resizable';
+	import type { pagesTable } from '$lib/db/schema';
 	import { builder, selectedBlockId } from '$lib/stores';
 	import { trpc } from '$lib/trpc/client';
+	import type { TPage } from '$lib/trpc/procedure/pages';
+	import type { InferSelectModel } from 'drizzle-orm';
 	import { onMount } from 'svelte';
 
 	let pageId: string;
+	let currentPage: TPage;
 
 	$: selectedBlock = $selectedBlockId !== null ? $builder.find($selectedBlockId) : undefined;
 
@@ -25,7 +34,7 @@
 		});
 
 		if (success && p) {
-			pageId = p.id;
+			currentPage = p;
 			builder.set(new Builder(p.blocks));
 		} else console.error(error);
 	});
@@ -49,289 +58,23 @@
 			class="flex h-full w-64 flex-col gap-2 border-r bg-background p-4"
 			defaultSize={25}
 		>
-			{#if selectedBlock}
-				<div class="flex h-full flex-col justify-between">
+			<div class="flex h-full flex-col justify-between">
+				{#if selectedBlock}
 					<div>
 						<h3 class="text-lg font-bold">
 							{selectedBlock.type.charAt(0).toUpperCase()}{selectedBlock.type.slice(1)}
 						</h3>
 
 						{#if selectedBlock?.type === 'profile'}
-							<Label for="image">Image</Label>
-							<Input
-								id="image"
-								type="text"
-								bind:value={selectedBlock.data.image}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isProfile(block.data)) return b;
-
-										block.data.image = e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="name">Name</Label>
-							<Input
-								id="name"
-								type="text"
-								bind:value={selectedBlock.data.name}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isProfile(block.data)) return b;
-
-										block.data.name = e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="bio">Bio</Label>
-							<Input
-								id="bio"
-								type="text"
-								bind:value={selectedBlock.data.bio}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isProfile(block.data)) return b;
-
-										block.data.bio = e.currentTarget.value;
-										return b;
-									})}
-							/>
+							<ProfilePanel {selectedBlock} />
 						{:else if selectedBlock.type === 'heading'}
-							<!-- TODO: Level -->
-							<Label for="level">Level</Label>
-							<Input
-								id="level"
-								type="text"
-								bind:value={selectedBlock.data.level}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isHeading(block.data)) return b;
-
-										block.data.level = e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="text">Text</Label>
-							<Input
-								id="text"
-								type="text"
-								bind:value={selectedBlock.data.text}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isHeading(block.data)) return b;
-
-										block.data.text = e.currentTarget.value;
-										return b;
-									})}
-							/>
+							<HeadingPanel {selectedBlock} />
 						{:else if selectedBlock.type === 'paragraph'}
-							<Label for="text">Text</Label>
-							<Input
-								id="text"
-								type="text"
-								bind:value={selectedBlock.data.text}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isParagraph(block.data)) return b;
-
-										block.data.text = e.currentTarget.value;
-										return b;
-									})}
-							/>
+							<ParagraphPanel {selectedBlock} />
 						{:else if selectedBlock.type === 'link'}
-							<Label for="href">Link</Label>
-							<Input
-								id="href"
-								type="text"
-								bind:value={selectedBlock.data.href}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isLink(block.data)) return b;
-
-										block.data.href = e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="heading">Heading</Label>
-							<Input
-								id="heading"
-								type="text"
-								bind:value={selectedBlock.data.heading}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isLink(block.data)) return b;
-
-										block.data.heading = e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="image">Image</Label>
-							<Input
-								id="image"
-								type="text"
-								bind:value={selectedBlock.data.image}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isLink(block.data)) return b;
-
-										block.data.image = e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="subtext">Subtext</Label>
-							<Input
-								id="subtext"
-								type="text"
-								bind:value={selectedBlock.data.subtext}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isLink(block.data)) return b;
-
-										block.data.subtext = e.currentTarget.value;
-										return b;
-									})}
-							/>
+							<LinkPanel {selectedBlock} />
 						{:else if selectedBlock.type === 'image'}
-							<Label for="src">Image</Label>
-							<Input
-								id="src"
-								type="text"
-								bind:value={selectedBlock.data.src}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isImage(block.data)) return b;
-
-										block.data.src = e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="alt">Alt</Label>
-							<Input
-								id="alt"
-								type="text"
-								bind:value={selectedBlock.data.alt}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isImage(block.data)) return b;
-
-										block.data.alt = e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="height">Height</Label>
-							<Input
-								id="height"
-								type="number"
-								bind:value={selectedBlock.data.height}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isImage(block.data)) return b;
-
-										block.data.height = +e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="text">Text</Label>
-							<Input
-								id="text"
-								type="text"
-								bind:value={selectedBlock.data.text}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isImage(block.data)) return b;
-
-										block.data.text = e.currentTarget.value;
-										return b;
-									})}
-							/>
-							<Label for="href">Link</Label>
-							<Input
-								id="href"
-								type="text"
-								bind:value={selectedBlock.data.href}
-								on:input={(e) =>
-									builder.update((b) => {
-										if ($selectedBlockId === null) return b;
-
-										const block = b.find($selectedBlockId);
-										if (!block) return b;
-
-										if (!isImage(block.data)) return b;
-
-										block.data.text = e.currentTarget.value;
-										return b;
-									})}
-							/>
+							<ImagePanel {selectedBlock} />
 						{/if}
 					</div>
 
@@ -344,8 +87,32 @@
 					>
 						Delete
 					</Button>
-				</div>
-			{/if}
+				{:else if currentPage}
+					<div>
+						<h3 class="text-lg font-bold">{currentPage.name}</h3>
+
+						<Label for="name">Name</Label>
+						<Input
+							id="name"
+							type="text"
+							bind:value={currentPage.name}
+							on:input={(e) => {
+								// TODO: Update page name
+							}}
+						/>
+						<Label for="slug">Slug</Label>
+						<Input
+							id="slug"
+							type="text"
+							disabled={currentPage.slug === 'home'}
+							bind:value={currentPage.slug}
+							on:input={(e) => {
+								// TODO: Update page slug
+							}}
+						/>
+					</div>
+				{/if}
+			</div>
 		</Resizable.Pane>
 		<Resizable.Handle />
 		<Resizable.Pane defaultSize={75}>

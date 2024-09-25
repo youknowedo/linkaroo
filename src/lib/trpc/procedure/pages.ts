@@ -1,11 +1,13 @@
 import { BlockSchema, type Block } from "$lib/builder";
+import { db } from "$lib/db/client";
+import { pagesTable, sitesTable } from "$lib/db/schema";
 import { lucia } from "$lib/server/auth";
-import { db } from "$lib/server/db/client";
-import { pagesTable, sitesTable } from "$lib/server/db/schema";
 import { t, type Res } from "$lib/trpc";
 import { eq, type InferSelectModel } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 import { z } from "zod";
+
+export type TPage = InferSelectModel<typeof pagesTable> & { blocks: Block[] };
 
 export const pages = t.router({
 	slugTaken: t.procedure
@@ -115,12 +117,7 @@ export const pages = t.router({
 				input
 			}): Promise<
 				Res<{
-					pages: {
-						id: string;
-						name: string;
-						slug: string;
-						blocks: Block[];
-					}[];
+					pages: TPage[];
 				}>
 			> => {
 				const sessionId = ctx.cookies.get(lucia.sessionCookieName);
@@ -188,12 +185,7 @@ export const pages = t.router({
 				input
 			}): Promise<
 				Res<{
-					page: {
-						id: string;
-						name: string;
-						slug: string;
-						blocks: Block[];
-					};
+					page: TPage;
 				}>
 			> => {
 				const sessionId = ctx.cookies.get(lucia.sessionCookieName);

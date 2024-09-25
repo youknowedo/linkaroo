@@ -1,6 +1,6 @@
+import { db } from "$lib/db/client";
+import { userTable } from "$lib/db/schema/auth";
 import { lucia } from "$lib/server/auth";
-import { db } from "$lib/server/db/client";
-import { userTable } from "$lib/server/db/schema/auth";
 import { t, type Res } from "$lib/trpc";
 import { eq } from "drizzle-orm";
 import { z } from "zod";

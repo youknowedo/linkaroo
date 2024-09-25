@@ -1,10 +1,10 @@
 import { dev } from "$app/environment";
-import { sessionTable, userTable } from "$lib/server/db/schema/auth";
+import { db } from "$lib/db/client";
+import { sessionTable, userTable } from "$lib/db/schema/auth";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { redirect, type Handle } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { Cookie, Lucia } from "lucia";
-import { db } from "./db/client";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable);
 

@@ -1,6 +1,6 @@
+import { db } from "$lib/db/client";
+import { sitesTable, userTable } from "$lib/db/schema";
 import { lucia } from "$lib/server/auth";
-import { db } from "$lib/server/db/client";
-import { sitesTable, userTable } from "$lib/server/db/schema";
 import { hash } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
 import { z } from "zod";
