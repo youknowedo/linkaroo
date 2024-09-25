@@ -13,10 +13,10 @@
 	<div class="">
 		<Dialog.Root bind:open={dialogOpen}>
 			<Dialog.Trigger
-				class="relative mx-auto flex h-full w-1/2 items-center justify-center delay-100 duration-1000 hover:py-8"
+				class="relative mx-auto flex h-full w-full items-center justify-center delay-100 duration-1000 hover:py-8"
 				on:click={() => (dialogOpen = true)}
 			>
-				<div class="absolute h-0.5 w-full bg-red-500" />
+				<div class="absolute h-0.5 w-1/2 bg-red-500" />
 				<div class="z-10 rounded-full bg-red-500 text-white">
 					<Plus />
 				</div>
