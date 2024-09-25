@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Paragraph } from '$lib/builder';
+	import type { Paragraph } from "$lib/builder";
 
 	export let edit: boolean;
 	export let data: Paragraph;

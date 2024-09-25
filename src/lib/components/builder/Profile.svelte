@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Profile } from '$lib/builder';
+	import type { Profile } from "$lib/builder";
 
 	export let edit: boolean;
 	export let data: Profile;

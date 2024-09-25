@@ -1,10 +1,10 @@
-import { dev } from '$app/environment';
-import { sessionTable, userTable } from '$lib/server/db/schema/auth';
-import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
-import { redirect, type Handle } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import { Cookie, Lucia } from 'lucia';
-import { db } from './db/client';
+import { dev } from "$app/environment";
+import { sessionTable, userTable } from "$lib/server/db/schema/auth";
+import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { redirect, type Handle } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
+import { Cookie, Lucia } from "lucia";
+import { db } from "./db/client";
 
 const adapter = new DrizzlePostgreSQLAdapter(db, sessionTable, userTable);
 
@@ -16,7 +16,7 @@ export const lucia = new Lucia(adapter, {
 	}
 });
 
-declare module 'lucia' {
+declare module "lucia" {
 	interface Register {
 		Lucia: typeof lucia;
 		DatabaseUserAttributes: {
@@ -29,11 +29,11 @@ export const createAuthHandle =
 	(): Handle =>
 	async ({ event, resolve }) => {
 		const setupCompleted =
-			(await db.select({}).from(userTable).where(eq(userTable.role, 'SUPER_ADMIN'))).length > 0;
+			(await db.select({}).from(userTable).where(eq(userTable.role, "SUPER_ADMIN"))).length > 0;
 
 		if (!setupCompleted) {
-			if (event.url.pathname !== '/setup') {
-				redirect(302, '/setup');
+			if (event.url.pathname !== "/setup") {
+				redirect(302, "/setup");
 			}
 
 			event.locals.user = null;
@@ -57,7 +57,7 @@ export const createAuthHandle =
 
 		if (sessionCookie)
 			event.cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: '.',
+				path: ".",
 				...sessionCookie.attributes
 			});
 

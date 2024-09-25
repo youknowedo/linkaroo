@@ -1,5 +1,5 @@
 <script lang="ts">
-	import drums from '$lib/assets/drums.jpg';
+	import drums from "$lib/assets/drums.jpg";
 </script>
 
 <div class="h-screen w-full lg:grid lg:grid-cols-2">

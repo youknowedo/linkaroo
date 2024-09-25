@@ -1,11 +1,11 @@
-import type { Block } from '$lib/builder';
-import { lucia } from '$lib/server/auth';
-import { db } from '$lib/server/db/client';
-import { pagesTable, sitesTable } from '$lib/server/db/schema';
-import { t, type Res } from '$lib/trpc';
-import { eq } from 'drizzle-orm';
-import { generateIdFromEntropySize } from 'lucia';
-import { z } from 'zod';
+import type { Block } from "$lib/builder";
+import { lucia } from "$lib/server/auth";
+import { db } from "$lib/server/db/client";
+import { pagesTable, sitesTable } from "$lib/server/db/schema";
+import { t, type Res } from "$lib/trpc";
+import { eq } from "drizzle-orm";
+import { generateIdFromEntropySize } from "lucia";
+import { z } from "zod";
 
 export const pages = t.router({
 	slugTaken: t.procedure
@@ -19,7 +19,7 @@ export const pages = t.router({
 			if (!sessionId)
 				return {
 					success: false,
-					error: 'No session found'
+					error: "No session found"
 				};
 
 			const { user } = await lucia.validateSession(sessionId);
@@ -27,7 +27,7 @@ export const pages = t.router({
 			if (!user)
 				return {
 					success: false,
-					error: 'No user found'
+					error: "No user found"
 				};
 
 			const { slug } = input;
@@ -52,7 +52,7 @@ export const pages = t.router({
 			if (!sessionId)
 				return {
 					success: false,
-					error: 'No session found'
+					error: "No session found"
 				};
 
 			const { user } = await lucia.validateSession(sessionId);
@@ -60,7 +60,7 @@ export const pages = t.router({
 			if (!user)
 				return {
 					success: false,
-					error: 'No user found'
+					error: "No user found"
 				};
 
 			const { name, slug } = input;
@@ -127,7 +127,7 @@ export const pages = t.router({
 				if (!sessionId)
 					return {
 						success: false,
-						error: 'No session found'
+						error: "No session found"
 					};
 
 				const { user } = await lucia.validateSession(sessionId);
@@ -135,7 +135,7 @@ export const pages = t.router({
 				if (!user)
 					return {
 						success: false,
-						error: 'No user found'
+						error: "No user found"
 					};
 
 				const { amount, offset } = input ?? {};
@@ -180,7 +180,7 @@ export const pages = t.router({
 			if (!sessionId)
 				return {
 					success: false,
-					error: 'No session found'
+					error: "No session found"
 				};
 
 			const { user } = await lucia.validateSession(sessionId);
@@ -188,7 +188,7 @@ export const pages = t.router({
 			if (!user)
 				return {
 					success: false,
-					error: 'No user found'
+					error: "No user found"
 				};
 
 			const { id } = input;

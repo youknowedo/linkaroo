@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
+	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
 
-	import { Label } from '$lib/components/ui/label';
-	import { trpc } from '$lib/trpc/client';
+	import { Label } from "$lib/components/ui/label";
+	import { trpc } from "$lib/trpc/client";
 
 	let auth = {
-		email: '',
-		username: '',
-		password: '',
-		passwordConfirmation: ''
+		email: "",
+		username: "",
+		password: "",
+		passwordConfirmation: ""
 	};
 	let site: {
 		websiteName: string;
@@ -19,13 +19,13 @@
 
 	const validateAuth = () => {
 		if (auth.password !== auth.passwordConfirmation) {
-			alert('Passwords do not match');
+			alert("Passwords do not match");
 			return;
 		}
 
 		// TODO: Username length & email validation
 
-		site = { websiteName: '' };
+		site = { websiteName: "" };
 	};
 
 	const submit = async (
@@ -35,7 +35,7 @@
 	) => {
 		e.preventDefault();
 
-		if (!site) return alert('Site not found');
+		if (!site) return alert("Site not found");
 
 		const { success, error } = await trpc($page).setup.mutate({
 			...auth,
@@ -44,7 +44,7 @@
 		});
 
 		if (!success) return alert(error);
-		else goto('/dashboard');
+		else goto("/dashboard");
 	};
 </script>
 

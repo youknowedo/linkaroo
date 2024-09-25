@@ -1,17 +1,17 @@
 <script lang="ts">
-	import ChevronLeft from 'lucide-svelte/icons/chevron-left';
-	import ChevronRight from 'lucide-svelte/icons/chevron-right';
+	import ChevronLeft from "lucide-svelte/icons/chevron-left";
+	import ChevronRight from "lucide-svelte/icons/chevron-right";
 
-	import { page } from '$app/stores';
-	import { showCharts } from '$lib/stores';
-	import { trpc } from '$lib/trpc/client';
-	import { year } from 'drizzle-orm/mysql-core';
-	import { onMount } from 'svelte';
-	import type { WebsiteStats } from '../../../../app';
-	import { Button } from '../../ui/button';
-	import * as Select from '../../ui/select';
-	import Separator from '../../ui/separator/separator.svelte';
-	import { Skeleton } from '../../ui/skeleton';
+	import { page } from "$app/stores";
+	import { showCharts } from "$lib/stores";
+	import { trpc } from "$lib/trpc/client";
+	import { year } from "drizzle-orm/mysql-core";
+	import { onMount } from "svelte";
+	import type { WebsiteStats } from "../../../../app";
+	import { Button } from "../../ui/button";
+	import * as Select from "../../ui/select";
+	import Separator from "../../ui/separator/separator.svelte";
+	import { Skeleton } from "../../ui/skeleton";
 
 	type Range = {
 		from: number | (() => number);
@@ -83,19 +83,19 @@
 		}
 	];
 	const items: SelectItem[] = [
-		{ label: 'Today', value: 0 },
-		{ label: 'Last 24 hours', value: 1 },
+		{ label: "Today", value: 0 },
+		{ label: "Last 24 hours", value: 1 },
 		undefined,
-		{ label: 'This week', value: 2 },
-		{ label: 'Last 7 days', value: 3 },
+		{ label: "This week", value: 2 },
+		{ label: "Last 7 days", value: 3 },
 		undefined,
-		{ label: 'This month', value: 4 },
-		{ label: 'Last 30 days', value: 5 },
-		{ label: 'Last 90 days', value: 6 },
+		{ label: "This month", value: 4 },
+		{ label: "Last 30 days", value: 5 },
+		{ label: "Last 90 days", value: 6 },
 		undefined,
-		{ label: 'This year', value: 7 },
-		{ label: 'Last 6 months', value: 8 },
-		{ label: 'Last 12 months', value: 9 }
+		{ label: "This year", value: 7 },
+		{ label: "Last 6 months", value: 8 },
+		{ label: "Last 12 months", value: 9 }
 	];
 
 	let stats: WebsiteStats | null = null;
@@ -110,13 +110,13 @@
 		stats = null;
 
 		const rawFrom =
-			typeof selectedRange.from === 'number' ? selectedRange.from : selectedRange.from();
-		const rawTo = typeof selectedRange.to === 'number' ? selectedRange.to : selectedRange.to();
+			typeof selectedRange.from === "number" ? selectedRange.from : selectedRange.from();
+		const rawTo = typeof selectedRange.to === "number" ? selectedRange.to : selectedRange.to();
 
 		const timeRange = rawTo - rawFrom;
 
-		const from = typeof selectedRange.from === 'number' ? rawFrom - timeRange * time : rawFrom;
-		const to = typeof selectedRange.from === 'number' ? rawTo - timeRange * time : rawTo;
+		const from = typeof selectedRange.from === "number" ? rawFrom - timeRange * time : rawFrom;
+		const to = typeof selectedRange.from === "number" ? rawTo - timeRange * time : rawTo;
 
 		const {
 			success,
@@ -126,22 +126,22 @@
 			from,
 			to
 		});
-		if (!success) return console.error('Failed to fetch analytics overview', error);
+		if (!success) return console.error("Failed to fetch analytics overview", error);
 
 		stats = s ?? null;
 
 		selected = selected && {
 			label:
 				time == 0
-					? (originalLabel ?? '')
+					? (originalLabel ?? "")
 					: `${new Date(from).toLocaleDateString(undefined, {
-							hour: 'numeric',
-							minute: 'numeric',
-							day: 'numeric',
-							month: 'short'
+							hour: "numeric",
+							minute: "numeric",
+							day: "numeric",
+							month: "short"
 						})} - ${new Date(to).toLocaleDateString(undefined, {
-							day: 'numeric',
-							month: 'short'
+							day: "numeric",
+							month: "short"
 						})}`,
 			value: selected.value ?? 0
 		};
@@ -155,11 +155,11 @@
 			error,
 			stats: s
 		} = await trpc($page).analytics.overview.query({
-			from: typeof selectedRange.from === 'number' ? selectedRange.from : selectedRange.from(),
-			to: typeof selectedRange.to === 'number' ? selectedRange.to : selectedRange.to()
+			from: typeof selectedRange.from === "number" ? selectedRange.from : selectedRange.from(),
+			to: typeof selectedRange.to === "number" ? selectedRange.to : selectedRange.to()
 		});
 
-		if (!success) return console.error('Failed to fetch analytics overview', error);
+		if (!success) return console.error("Failed to fetch analytics overview", error);
 
 		stats = s ?? null;
 	});
@@ -271,10 +271,10 @@
 					error,
 					stats: s
 				} = await trpc($page).analytics.overview.query({
-					from: typeof selectedRange.from === 'number' ? selectedRange.from : selectedRange.from(),
-					to: typeof selectedRange.to === 'number' ? selectedRange.to : selectedRange.to()
+					from: typeof selectedRange.from === "number" ? selectedRange.from : selectedRange.from(),
+					to: typeof selectedRange.to === "number" ? selectedRange.to : selectedRange.to()
 				});
-				if (!success) return console.error('Failed to fetch analytics overview', error);
+				if (!success) return console.error("Failed to fetch analytics overview", error);
 
 				stats = s ?? null;
 				time = 0;

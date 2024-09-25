@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { blockTypes } from '$lib/builder';
-	import { Button } from '$lib/components/ui/button';
-	import * as Dialog from '$lib/components/ui/dialog';
-	import { builder, selectedBlockId } from '$lib/stores';
-	import { Plus } from 'lucide-svelte';
+	import { blockTypes } from "$lib/builder";
+	import { Button } from "$lib/components/ui/button";
+	import * as Dialog from "$lib/components/ui/dialog";
+	import { builder, selectedBlockId } from "$lib/stores";
+	import { Plus } from "lucide-svelte";
 
 	export let dialogOpen: boolean;
 	export let at: number;

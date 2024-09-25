@@ -1,4 +1,4 @@
-import type { Session, User } from 'lucia';
+import type { Session, User } from "lucia";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces

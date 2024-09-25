@@ -2,15 +2,15 @@ import {
 	UMAMI_API_CLIENT_ENDPOINT,
 	UMAMI_API_CLIENT_SECRET,
 	UMAMI_API_CLIENT_USER_ID
-} from '$env/static/private';
-import { lucia } from '$lib/server/auth';
-import { db } from '$lib/server/db/client';
-import { sitesTable } from '$lib/server/db/schema';
-import { t, type Res } from '$lib/trpc';
-import { getClient } from '@umami/api-client';
-import { eq } from 'drizzle-orm';
-import { z } from 'zod';
-import type { WebsiteStats } from '../../../app';
+} from "$env/static/private";
+import { lucia } from "$lib/server/auth";
+import { db } from "$lib/server/db/client";
+import { sitesTable } from "$lib/server/db/schema";
+import { t, type Res } from "$lib/trpc";
+import { getClient } from "@umami/api-client";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
+import type { WebsiteStats } from "../../../app";
 
 export const umami = getClient({
 	userId: UMAMI_API_CLIENT_USER_ID,
@@ -42,7 +42,7 @@ export const analytics = t.router({
 				if (!sessionId)
 					return {
 						success: false,
-						error: 'No session found'
+						error: "No session found"
 					};
 
 				const { user } = await lucia.validateSession(sessionId);
@@ -50,7 +50,7 @@ export const analytics = t.router({
 				if (!user)
 					return {
 						success: false,
-						error: 'No user found'
+						error: "No user found"
 					};
 
 				// TODO: Make non owners of the site be able to view analytics

@@ -1,11 +1,11 @@
-import { lucia } from '$lib/server/auth';
-import { db } from '$lib/server/db/client';
-import { sitesTable, userTable } from '$lib/server/db/schema';
-import { hash } from '@node-rs/argon2';
-import { generateIdFromEntropySize } from 'lucia';
-import { z } from 'zod';
-import { t, type Res } from '..';
-import { umami } from './analytics';
+import { lucia } from "$lib/server/auth";
+import { db } from "$lib/server/db/client";
+import { sitesTable, userTable } from "$lib/server/db/schema";
+import { hash } from "@node-rs/argon2";
+import { generateIdFromEntropySize } from "lucia";
+import { z } from "zod";
+import { t, type Res } from "..";
+import { umami } from "./analytics";
 
 export const setup = t.procedure
 	.input(
@@ -25,7 +25,7 @@ export const setup = t.procedure
 		if (password !== passwordConfirmation) {
 			return {
 				success: false,
-				error: 'Passwords do not match'
+				error: "Passwords do not match"
 			};
 		}
 
@@ -43,13 +43,13 @@ export const setup = t.procedure
 			email,
 			username,
 			passwordHash,
-			role: 'SUPER_ADMIN'
+			role: "SUPER_ADMIN"
 		});
 		const session = await lucia.createSession(userId, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
 
 		ctx.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
+			path: ".",
 			...sessionCookie.attributes
 		});
 
@@ -63,7 +63,7 @@ export const setup = t.procedure
 		if (!ok || !data)
 			return {
 				success: false,
-				error: 'Failed to create analytics profile'
+				error: "Failed to create analytics profile"
 			};
 
 		await db.insert(sitesTable).values({

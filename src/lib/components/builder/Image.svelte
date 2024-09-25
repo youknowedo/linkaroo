@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Image } from '$lib/builder';
+	import type { Image } from "$lib/builder";
 
 	export let edit: boolean;
 	export let data: Image;

@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
+	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
 
-	import { Label } from '$lib/components/ui/label';
-	import { trpc } from '$lib/trpc/client';
+	import { Label } from "$lib/components/ui/label";
+	import { trpc } from "$lib/trpc/client";
 
-	let emailOrUsername = '';
-	let password = '';
+	let emailOrUsername = "";
+	let password = "";
 
 	const submit = async (
 		e: SubmitEvent & {
@@ -24,7 +24,7 @@
 
 		if (!success)
 			return alert(error); // TODO: Toast
-		else goto('/dashboard');
+		else goto("/dashboard");
 	};
 </script>
 
@@ -56,5 +56,5 @@
 
 <div class="mt-4 text-center text-sm">
 	Don&apos;t have an account?
-	<button on:click={() => goto('signup')} class="underline"> Signup </button>
+	<button on:click={() => goto("signup")} class="underline"> Signup </button>
 </div>

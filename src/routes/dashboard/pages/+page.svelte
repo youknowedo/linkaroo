@@ -1,30 +1,30 @@
 <script lang="ts">
-	import Plus from 'lucide-svelte/icons/plus';
+	import Plus from "lucide-svelte/icons/plus";
 
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import Header from '$lib/components/dashboard/Header.svelte';
-	import { Button } from '$lib/components/ui/button';
-	import * as Card from '$lib/components/ui/card';
-	import * as Dialog from '$lib/components/ui/dialog';
-	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
-	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
-	import { trpc } from '$lib/trpc/client';
-	import { pgEnum } from 'drizzle-orm/pg-core';
-	import { onMount } from 'svelte';
+	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+	import Header from "$lib/components/dashboard/Header.svelte";
+	import { Button } from "$lib/components/ui/button";
+	import * as Card from "$lib/components/ui/card";
+	import * as Dialog from "$lib/components/ui/dialog";
+	import { Input } from "$lib/components/ui/input";
+	import { Label } from "$lib/components/ui/label";
+	import Skeleton from "$lib/components/ui/skeleton/skeleton.svelte";
+	import { trpc } from "$lib/trpc/client";
+	import { pgEnum } from "drizzle-orm/pg-core";
+	import { onMount } from "svelte";
 
 	type Page = Exclude<
-		Awaited<ReturnType<ReturnType<typeof trpc>['pages']['multiple']['query']>>['pages'],
+		Awaited<ReturnType<ReturnType<typeof trpc>["pages"]["multiple"]["query"]>>["pages"],
 		undefined
 	>[number];
 
 	let pages: Page[] | undefined = undefined;
 
 	let dialogOpen = false;
-	let newPage: Omit<Page, 'id'> = {
-		name: '',
-		slug: '',
+	let newPage: Omit<Page, "id"> = {
+		name: "",
+		slug: "",
 		blocks: []
 	};
 
@@ -69,8 +69,8 @@
 
 								if (success) {
 									newPage = {
-										name: '',
-										slug: '',
+										name: "",
+										slug: "",
 										blocks: []
 									};
 								} else console.log(error);
@@ -95,8 +95,8 @@
 						</Card.Title>
 
 						<div>
-							<Button variant="outline" on:click={() => goto('pages/' + page.slug)}>Edit</Button>
-							{#if page.slug !== 'home'}
+							<Button variant="outline" on:click={() => goto("pages/" + page.slug)}>Edit</Button>
+							{#if page.slug !== "home"}
 								<Button variant="destructive" on:click={() => deletePage(page.id)}>Delete</Button>
 							{/if}
 						</div>

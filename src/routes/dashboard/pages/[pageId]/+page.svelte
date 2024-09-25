@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Builder, isHeading, isImage, isLink, isParagraph, isProfile } from '$lib/builder';
-	import Page from '$lib/components/Page.svelte';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
-	import * as Resizable from '$lib/components/ui/resizable';
-	import { builder, selectedBlockId } from '$lib/stores';
+	import { Builder, isHeading, isImage, isLink, isParagraph, isProfile } from "$lib/builder";
+	import Page from "$lib/components/Page.svelte";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
+	import { Label } from "$lib/components/ui/label";
+	import * as Resizable from "$lib/components/ui/resizable";
+	import { builder, selectedBlockId } from "$lib/stores";
 
 	$: selectedBlock = $selectedBlockId !== null ? $builder.find($selectedBlockId) : undefined;
 </script>
@@ -23,7 +23,7 @@
 							{selectedBlock.type.charAt(0).toUpperCase()}{selectedBlock.type.slice(1)}
 						</h3>
 
-						{#if selectedBlock?.type === 'profile'}
+						{#if selectedBlock?.type === "profile"}
 							<Label for="image">Image</Label>
 							<Input
 								id="image"
@@ -78,7 +78,7 @@
 										return b;
 									})}
 							/>
-						{:else if selectedBlock.type === 'heading'}
+						{:else if selectedBlock.type === "heading"}
 							<!-- TODO: Level -->
 							<Label for="level">Level</Label>
 							<Input
@@ -116,7 +116,7 @@
 										return b;
 									})}
 							/>
-						{:else if selectedBlock.type === 'paragraph'}
+						{:else if selectedBlock.type === "paragraph"}
 							<Label for="text">Text</Label>
 							<Input
 								id="text"
@@ -135,7 +135,7 @@
 										return b;
 									})}
 							/>
-						{:else if selectedBlock.type === 'link'}
+						{:else if selectedBlock.type === "link"}
 							<Label for="href">Link</Label>
 							<Input
 								id="href"
@@ -208,7 +208,7 @@
 										return b;
 									})}
 							/>
-						{:else if selectedBlock.type === 'image'}
+						{:else if selectedBlock.type === "image"}
 							<Label for="src">Image</Label>
 							<Input
 								id="src"

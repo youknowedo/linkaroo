@@ -1,6 +1,6 @@
-import { DB_HOST, DB_NAME, DB_PASS, DB_USER } from '$env/static/private';
-import { drizzle } from 'drizzle-orm/node-postgres';
-import pg from 'pg';
+import { DB_HOST, DB_NAME, DB_PASS, DB_USER } from "$env/static/private";
+import { drizzle } from "drizzle-orm/node-postgres";
+import pg from "pg";
 
 const { Client } = pg;
 

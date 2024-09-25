@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Link } from '$lib/builder';
+	import type { Link } from "$lib/builder";
 
 	export let edit: boolean;
 	export let data: Link;
@@ -26,7 +26,7 @@
 			contenteditable={edit}
 			on:input={(e) => ((data.subtext = e.currentTarget.innerText), onInput(data))}
 		>
-			{data.subtext ?? ''}
+			{data.subtext ?? ""}
 		</p>
 	</div>
 </a>

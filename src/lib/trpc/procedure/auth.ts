@@ -1,11 +1,11 @@
-import { lucia } from '$lib/server/auth';
-import { db } from '$lib/server/db/client';
-import { userTable } from '$lib/server/db/schema/auth';
-import { t, type Res } from '$lib/trpc';
-import { eq } from 'drizzle-orm';
-import { z } from 'zod';
+import { lucia } from "$lib/server/auth";
+import { db } from "$lib/server/db/client";
+import { userTable } from "$lib/server/db/schema/auth";
+import { t, type Res } from "$lib/trpc";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
 
-const { verify } = await import('@node-rs/argon2');
+const { verify } = await import("@node-rs/argon2");
 
 export const auth = t.router({
 	login: t.procedure
@@ -31,7 +31,7 @@ export const auth = t.router({
 				if (!userFromUsername)
 					return {
 						success: false,
-						error: 'Invalid email or password'
+						error: "Invalid email or password"
 					};
 
 				user = userFromUsername;
@@ -46,7 +46,7 @@ export const auth = t.router({
 			if (!validPassword) {
 				return {
 					success: false,
-					error: 'Invalid email or password'
+					error: "Invalid email or password"
 				};
 			}
 
@@ -54,7 +54,7 @@ export const auth = t.router({
 			const sessionCookie = lucia.createSessionCookie(session.id);
 
 			ctx.cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: '/',
+				path: "/",
 				...sessionCookie.attributes
 			});
 

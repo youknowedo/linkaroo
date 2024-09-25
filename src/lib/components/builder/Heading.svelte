@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Heading } from '$lib/builder';
-	import { selectedBlockId } from '$lib/stores';
+	import type { Heading } from "$lib/builder";
+	import { selectedBlockId } from "$lib/stores";
 
 	export let edit: boolean;
 	export let data: Heading;

@@ -1,4 +1,4 @@
-[contenteditable='true'] {
+[contenteditable="true"] {
 	outline: none;
 
 	&:empty:not(:focus):before {
