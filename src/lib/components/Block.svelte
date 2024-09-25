@@ -20,11 +20,5 @@
 {:else if block.type === 'link'}
 	<Link {onInput} {edit} {...block} />
 {:else if block.type === 'image'}
-	{#if !edit && block.data.href}
-		<a href={block.data.href}>
-			<Image {onInput} {edit} {...block} />
-		</a>
-	{:else}
-		<Image {onInput} {edit} {...block} />
-	{/if}
+	<Image {onInput} {edit} {...block} />
 {/if}

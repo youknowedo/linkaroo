@@ -1,55 +1,55 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1726781402167,
-      "tag": "0000_mysterious_lily_hollister",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1726915584759,
-      "tag": "0001_sloppy_maria_hill",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1726934898072,
-      "tag": "0002_stiff_paibok",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1726936138710,
-      "tag": "0003_high_princess_powerful",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1727211097074,
-      "tag": "0004_strong_wallflower",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1727254022864,
-      "tag": "0005_noisy_bullseye",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1727261693376,
-      "tag": "0006_young_marvel_zombies",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "postgresql",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "7",
+			"when": 1726781402167,
+			"tag": "0000_mysterious_lily_hollister",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1726915584759,
+			"tag": "0001_sloppy_maria_hill",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1726934898072,
+			"tag": "0002_stiff_paibok",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1726936138710,
+			"tag": "0003_high_princess_powerful",
+			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1727211097074,
+			"tag": "0004_strong_wallflower",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1727254022864,
+			"tag": "0005_noisy_bullseye",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1727261693376,
+			"tag": "0006_young_marvel_zombies",
+			"breakpoints": true
+		}
+	]
 }
