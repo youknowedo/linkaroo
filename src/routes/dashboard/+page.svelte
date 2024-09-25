@@ -6,7 +6,7 @@
 	import ChartArea from 'lucide-svelte/icons/chart-area';
 </script>
 
-<div class="container md:p-10">
+<div class="container max-w-[calc(100vw-4rem)] md:p-10">
 	<Header>
 		<div>
 			<Button

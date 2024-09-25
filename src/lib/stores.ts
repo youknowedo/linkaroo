@@ -3,6 +3,7 @@ import { Builder, type Block } from './builder';
 
 export const navItems = readable<{ name: string; href: string }[]>([
 	{ name: 'Dashboard', href: '/dashboard' },
+	{ name: 'Pages', href: '/dashboard/pages' },
 	{ name: 'Analytics', href: '/dashboard/analytics' },
 	{ name: 'Settings', href: '/dashboard/settings' }
 ]);

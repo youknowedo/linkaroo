@@ -2,6 +2,7 @@ import { pgTable, text } from 'drizzle-orm/pg-core';
 import { userTable } from './auth';
 
 export * from './auth';
+export * from './pages';
 
 export const sitesTable = pgTable('sites', {
 	id: text('id').primaryKey(),
