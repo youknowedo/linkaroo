@@ -1,14 +1,3 @@
-[contenteditable="true"] {
-	outline: none;
-
-	&:empty:not(:focus):before {
-		content: attr(placeholder);
-		color: grey;
-		font-style: italic;
-		pointer-events: none;
-	}
-}
-
 body:has(#page.default) {
 	& :has(> #page) {
 		@apply min-h-screen bg-muted/40;
@@ -25,17 +14,33 @@ body:has(#page.default) {
 				}
 			}
 
+			& textarea {
+				@apply block h-full w-full resize-none bg-transparent outline-none;
+				text-align: inherit;
+				field-sizing: content;
+
+				&::placeholder {
+					color: grey;
+					font-style: italic;
+					pointer-events: none;
+				}
+			}
+
 			& .profile {
 				@apply flex flex-col items-center gap-2;
 
-				& img {
+				& > img {
 					@apply aspect-square h-32 rounded-full object-cover;
 				}
-				& h2 {
-					@apply text-2xl font-bold;
-				}
-				& p {
-					@apply max-w-md text-sm;
+				& > div {
+					@apply flex w-full flex-col items-center;
+
+					& > h2 {
+						@apply w-full text-center text-2xl font-bold;
+					}
+					& > p {
+						@apply w-full max-w-md text-center text-sm;
+					}
 				}
 			}
 

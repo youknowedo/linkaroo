@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Link } from "$lib/builder";
+	import type { Link } from '$lib/builder';
 
 	export let edit: boolean;
 	export let data: Link;
@@ -13,20 +13,28 @@
 	{/if}
 
 	<div>
-		<h4
-			placeholder="Link text"
-			contenteditable={edit}
-			on:input={(e) => ((data.heading = e.currentTarget.innerText), onInput(data))}
-		>
-			{data.heading}
+		<h4>
+			{#if edit}
+				<textarea
+					placeholder="Link text"
+					bind:value={data.heading}
+					on:input={(e) => ((data.heading = e.currentTarget.value), onInput(data))}
+				/>
+			{:else}
+				{data.heading}
+			{/if}
 		</h4>
 
-		<p
-			placeholder="Subtext"
-			contenteditable={edit}
-			on:input={(e) => ((data.subtext = e.currentTarget.innerText), onInput(data))}
-		>
-			{data.subtext ?? ""}
+		<p>
+			{#if edit}
+				<textarea
+					placeholder="Subtext"
+					bind:value={data.subtext}
+					on:input={(e) => ((data.subtext = e.currentTarget.value), onInput(data))}
+				/>
+			{:else}
+				{data.subtext}
+			{/if}
 		</p>
 	</div>
 </a>
