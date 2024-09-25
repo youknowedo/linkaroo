@@ -1,14 +1,21 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import { Builder, isHeading, isImage, isLink, isParagraph, isProfile } from "$lib/builder";
+	import Header from "$lib/components/dashboard/Header.svelte";
 	import Page from "$lib/components/Page.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import * as Resizable from "$lib/components/ui/resizable";
 	import { builder, selectedBlockId } from "$lib/stores";
+	import { trpc } from "$lib/trpc/client";
 
 	$: selectedBlock = $selectedBlockId !== null ? $builder.find($selectedBlockId) : undefined;
 </script>
+
+<Header>
+	<Button>Save</Button>
+</Header>
 
 <div class="h-[calc(100vh-4rem)]">
 	<Resizable.PaneGroup direction="horizontal">
