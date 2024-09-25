@@ -16,7 +16,7 @@ body:has(#page.default) {
 		& #page {
 			@apply container flex max-w-xl flex-col items-center gap-2 py-24 text-center;
 
-			& > button {
+			& > button.editable {
 				@apply w-full cursor-auto;
 
 				&:hover,

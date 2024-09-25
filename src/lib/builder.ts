@@ -1,4 +1,9 @@
-export type Block =
+import { generateIdFromEntropySize } from 'lucia';
+import { Heading as H, Image as I, Link as L, Pilcrow as P, User as U } from 'lucide-svelte';
+
+import type { ComponentType } from 'svelte';
+
+export type Block = { _id: string; id?: string } & (
 	| {
 			type: 'profile';
 			data: Profile;
@@ -18,7 +23,30 @@ export type Block =
 	| {
 			type: 'image';
 			data: Image;
-	  };
+	  }
+);
+export const blockTypes: { type: Block['type']; icon: ComponentType }[] = [
+	{
+		type: 'profile',
+		icon: U
+	},
+	{
+		type: 'heading',
+		icon: H
+	},
+	{
+		type: 'paragraph',
+		icon: P
+	},
+	{
+		type: 'link',
+		icon: L
+	},
+	{
+		type: 'image',
+		icon: I
+	}
+] as const;
 
 export type Profile = {
 	name: string;
@@ -36,7 +64,7 @@ export type Heading = {
 	level?: 1 | 2 | 3 | 4 | 5 | 6;
 	text: string;
 };
-export const isHeading = (data: unknown): data is Heading => {
+export const isHeading = (data: unknown): data is H => {
 	if (typeof data === 'object' && data !== null) {
 		return 'text' in data;
 	}
@@ -59,7 +87,7 @@ export type Link = {
 	image?: string;
 	subtext?: string;
 };
-export const isLink = (data: unknown): data is Link => {
+export const isLink = (data: unknown): data is L => {
 	if (typeof data === 'object' && data !== null) {
 		return 'href' in data && 'heading' in data;
 	}
@@ -73,7 +101,7 @@ export type Image = {
 	text?: string | undefined;
 	href?: string | undefined;
 };
-export const isImage = (data: unknown): data is Image => {
+export const isImage = (data: unknown): data is I => {
 	if (typeof data === 'object' && data !== null) {
 		return 'src' in data && 'alt' in data;
 	}
@@ -87,24 +115,51 @@ export class Builder {
 		this.blocks = blocks;
 	}
 
-	private addBlock(data: Block) {
-		this.blocks.push(data);
+	add(type: Block['type'], at?: number) {
+		if (type === 'profile') return this.addProfile(undefined, at);
+		if (type === 'heading') return this.addHeading(undefined, at);
+		if (type === 'paragraph') return this.addParagraph(undefined, at);
+		if (type === 'link') return this.addLink(undefined, at);
+		if (type === 'image') return this.addImage(undefined, at);
+
+		throw new Error('Not implemented');
+	}
+	private addBlock(data: Block, at = -1) {
+		if (at < 0) this.blocks.push(data);
+		else this.blocks.splice(at, 0, data);
+
+		return this;
+	}
+	addProfile(data: Profile = { image: '', name: '', bio: '' }, at?: number) {
+		return this.addBlock({ _id: generateIdFromEntropySize(10), type: 'profile', data }, at);
+	}
+	addHeading(data: Heading = { text: '' }, at?: number) {
+		return this.addBlock({ _id: generateIdFromEntropySize(10), type: 'heading', data }, at);
+	}
+	addParagraph(data: Paragraph = { text: '' }, at?: number) {
+		return this.addBlock({ _id: generateIdFromEntropySize(10), type: 'paragraph', data }, at);
+	}
+	addLink(data: Link = { heading: '', href: '' }, at?: number) {
+		return this.addBlock({ _id: generateIdFromEntropySize(10), type: 'link', data }, at);
+	}
+	addImage(data: Image = { src: '', alt: '' }, at?: number) {
+		return this.addBlock({ _id: generateIdFromEntropySize(10), type: 'image', data }, at);
+	}
+
+	delete(id: string) {
+		const index = this.findIndex(id);
+
+		console.log(this.blocks.length);
+		this.blocks.splice(index, 1);
+		console.log(this.blocks.length);
+
 		return this;
 	}
 
-	addProfile(data: Profile) {
-		return this.addBlock({ type: 'profile', data });
+	find(id: string) {
+		return this.blocks.find((block) => block._id === id);
 	}
-	addHeading(data: Heading) {
-		return this.addBlock({ type: 'heading', data });
-	}
-	addParagraph(data: Paragraph) {
-		return this.addBlock({ type: 'paragraph', data });
-	}
-	addLink(data: Link) {
-		return this.addBlock({ type: 'link', data });
-	}
-	addImage(data: Image) {
-		return this.addBlock({ type: 'image', data });
+	findIndex(id: string) {
+		return this.blocks.findIndex((block) => block._id === id);
 	}
 }

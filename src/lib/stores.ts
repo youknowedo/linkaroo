@@ -1,5 +1,5 @@
 import { readable, writable } from 'svelte/store';
-import { Builder, type Block } from './builder';
+import { Builder } from './builder';
 
 export const navItems = readable<{ name: string; href: string }[]>([
 	{ name: 'Dashboard', href: '/dashboard' },
@@ -10,7 +10,7 @@ export const navItems = readable<{ name: string; href: string }[]>([
 
 export const showCharts = writable(true);
 
-export const blocks = writable<Block[]>(
+export const builder = writable<Builder>(
 	new Builder()
 		.addProfile({
 			name: 'John Doe',
@@ -40,12 +40,8 @@ export const blocks = writable<Block[]>(
 		})
 		.addLink({
 			href: 'https://google.com',
-			heading: "It's a link",
+			heading: 'Yet another link',
 			subtext: 'tf is this link'
 		})
-		.addLink({
-			href: 'https://google.com',
-			heading: "It's another link"
-		}).blocks
 );
-export const selectedBlockIndex = writable<number | null>(null);
+export const selectedBlockId = writable<string | null>(null);
