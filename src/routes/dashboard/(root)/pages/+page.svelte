@@ -20,6 +20,7 @@
 	let newPage: Omit<Omit<TPage, 'id'>, 'siteId'> = {
 		name: '',
 		slug: '',
+		titleType: 'both',
 		blocks: []
 	};
 
@@ -80,6 +81,7 @@
 									newPage = {
 										name: '',
 										slug: '',
+										titleType: 'both',
 										blocks: []
 									};
 

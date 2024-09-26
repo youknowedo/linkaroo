@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { page } from "$app/stores";
-	import { Builder } from "$lib/builder";
-	import Page from "$lib/components/Page.svelte";
-	import { builder } from "$lib/stores";
-	import { trpc } from "$lib/trpc/client";
-	import { onMount } from "svelte";
+	import { page } from '$app/stores';
+	import { Builder } from '$lib/builder';
+	import Page from '$lib/components/Page.svelte';
+	import { builder } from '$lib/stores';
+	import { trpc } from '$lib/trpc/client';
+	import { onMount } from 'svelte';
 
 	onMount(async () => {
 		const {
@@ -12,10 +12,16 @@
 			error,
 			page: p
 		} = await trpc($page).pages.single.query({
-			slug: "home"
+			slug: 'home'
 		});
 
-		if (success && p) builder.set(new Builder(p.blocks));
+		if (success && p)
+			builder.set(
+				new Builder(p.blocks, {
+					...p,
+					siteName: p.siteName ?? ''
+				})
+			);
 		else console.error(error);
 	});
 </script>

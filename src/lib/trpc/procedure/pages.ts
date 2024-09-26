@@ -7,7 +7,7 @@ import { eq, type InferSelectModel } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 import { z } from "zod";
 
-export type TPage = InferSelectModel<typeof pagesTable> & { blocks: Block[] };
+export type TPage = InferSelectModel<typeof pagesTable>;
 
 export const pages = t.router({
 	slugTaken: t.procedure
@@ -187,7 +187,7 @@ export const pages = t.router({
 				input
 			}): Promise<
 				Res<{
-					page: TPage;
+					page: TPage & { siteName?: string };
 				}>
 			> => {
 				const sessionId = ctx.cookies.get(lucia.sessionCookieName);
@@ -206,17 +206,19 @@ export const pages = t.router({
 					};
 
 				let siteId = input?.siteId;
+				let siteName: string | undefined = undefined;
 
 				if (!siteId) {
 					// TODO: Make non owners of the site be able to view
 					const site = (
 						await db
-							.select({ id: sitesTable.umamiId })
+							.select({ id: sitesTable.umamiId, name: sitesTable.name })
 							.from(sitesTable)
 							.where(eq(sitesTable.ownerId, user.id))
 					)[0];
 
 					siteId = site.id;
+					siteName = site.name;
 				}
 
 				let page: InferSelectModel<typeof pagesTable>;
@@ -228,6 +230,7 @@ export const pages = t.router({
 					success: true,
 					page: {
 						...page,
+						siteName: siteName,
 						blocks: page.blocks as Block[]
 					}
 				};
@@ -240,6 +243,7 @@ export const pages = t.router({
 				id: z.string(),
 				name: z.string(),
 				slug: z.string(),
+				titleType: z.union([z.literal("siteOnly"), z.literal("pageOnly"), z.literal("both")]),
 				blocks: z.array(BlockSchema)
 			})
 		)
@@ -259,16 +263,18 @@ export const pages = t.router({
 					error: "No user found"
 				};
 
-			const { id, name, blocks } = input;
+			const { id, name, titleType, blocks } = input;
 			let { slug } = input;
 
 			slug = encodeURIComponent(slug.toLowerCase().replace(/ /g, "-"));
+			console.log(titleType);
 
 			await db
 				.update(pagesTable)
 				.set({
 					name,
 					slug,
+					titleType,
 					blocks
 				})
 				.where(eq(pagesTable.id, id));

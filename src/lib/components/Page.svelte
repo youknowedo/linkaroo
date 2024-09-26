@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { blockTypes, Builder, type Block as TBlock } from "$lib/builder";
-	import * as Dialog from "$lib/components/ui/dialog";
-	import { builder, selectedBlockId } from "$lib/stores";
-	import Plus from "lucide-svelte/icons/plus";
-	import { onMount } from "svelte";
-	import Block from "./Block.svelte";
-	import AddBlock from "./dashboard/edit/AddBlock.svelte";
-	import "./Page.default.css";
-	import { Button } from "./ui/button";
+	import { blockTypes, Builder, type Block as TBlock } from '$lib/builder';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import { builder, selectedBlockId } from '$lib/stores';
+	import Plus from 'lucide-svelte/icons/plus';
+	import { onMount } from 'svelte';
+	import Block from './Block.svelte';
+	import AddBlock from './dashboard/edit/AddBlock.svelte';
+	import './Page.default.css';
+	import { Button } from './ui/button';
 
 	export let edit = false;
 	export let styles: string | undefined = undefined;
@@ -16,7 +16,7 @@
 	let dialogOpen = false;
 	$: newBlockOpen = $builder.blocks.map(() => false);
 
-	const onInput = (data: TBlock["data"]) => {
+	const onInput = (data: TBlock['data']) => {
 		builder.update((b) => {
 			if ($selectedBlockId === null) return b;
 
@@ -36,12 +36,20 @@
 </script>
 
 <svelte:head>
+	<title>
+		{edit ? 'Editing:' : ''}
+		{$builder.titleType === 'siteOnly'
+			? $builder.siteName
+			: $builder.titleType === 'pageOnly'
+				? $builder.name
+				: $builder.siteName + ' - ' + $builder.name}
+	</title>
 	{#if styles}
 		<style bind:this={styleTag}></style>
 	{/if}
 </svelte:head>
 
-<div id="page" class={styles ? "" : "default"}>
+<div id="page" class={styles ? '' : 'default'}>
 	{#if edit}
 		<AddBlock {dialogOpen} at={0} />
 	{/if}

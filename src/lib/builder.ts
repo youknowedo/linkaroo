@@ -1,8 +1,10 @@
+import type { InferSelectModel } from "drizzle-orm";
 import { generateIdFromEntropySize } from "lucia";
 import { Heading as H, Image as I, Link as L, Pilcrow as P, User as U } from "lucide-svelte";
 
 import type { ComponentType } from "svelte";
 import { z } from "zod";
+import type { pagesTable } from "./db/schema";
 
 export const ProfileSchema = z.object({
 	name: z.string(),
@@ -133,15 +135,25 @@ export class Builder {
 
 	name: string;
 	slug: string;
+	siteName: string;
+	titleType: InferSelectModel<typeof pagesTable>["titleType"];
 	blocks: Block[];
 
 	constructor(
 		blocks: Block[] = [],
-		page: { name: string; slug: string; id: string } = { name: "", slug: "", id: "" }
+		page: {
+			name: string;
+			siteName: string;
+			titleType: InferSelectModel<typeof pagesTable>["titleType"];
+			slug: string;
+			id: string;
+		} = { name: "", siteName: "", slug: "", titleType: "both", id: "" }
 	) {
 		this.blocks = blocks;
 		this.name = page.name;
 		this.slug = page.slug;
+		this.siteName = page.siteName;
+		this.titleType = page.titleType;
 		this._id = page.id;
 	}
 

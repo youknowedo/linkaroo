@@ -13,14 +13,22 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import * as Resizable from '$lib/components/ui/resizable';
-	import type { pagesTable } from '$lib/db/schema';
+	import * as Select from '$lib/components/ui/select';
+	import { titleType } from '$lib/db/schema';
 	import { builder, selectedBlockId } from '$lib/stores';
 	import { trpc } from '$lib/trpc/client';
-	import type { TPage } from '$lib/trpc/procedure/pages';
-	import type { InferSelectModel } from 'drizzle-orm';
 	import { onMount } from 'svelte';
 
 	$: selectedBlock = $selectedBlockId !== null ? $builder.find($selectedBlockId) : undefined;
+
+	$: selectedTitleType = $builder.titleType
+		? {
+				label: $builder.titleType
+					.replace(/([A-Z])/g, ' $1')
+					.replace(/^./, (str) => str.toUpperCase()),
+				value: $builder.titleType
+			}
+		: undefined;
 
 	onMount(async () => {
 		const {
@@ -35,8 +43,10 @@
 			builder.set(
 				new Builder(p.blocks, {
 					id: p.id,
+					siteName: p.siteName ?? '',
 					name: p.name,
-					slug: p.slug
+					slug: p.slug,
+					titleType: p.titleType
 				})
 			);
 		} else console.error(error);
@@ -47,10 +57,8 @@
 	<Button
 		on:click={async () => {
 			await trpc($page).pages.update.mutate({
-				id: $builder.id,
-				name: $builder.name,
-				slug: $builder.slug,
-				blocks: $builder.blocks
+				...$builder,
+				id: $builder.id
 			});
 
 			pushState('/dashboard/pages/' + $builder.slug, { replace: true });
@@ -107,6 +115,24 @@
 									return b;
 								})}
 						/>
+
+						<Label for="name">Title Type</Label>
+						<Select.Root
+							selected={selectedTitleType}
+							onSelectedChange={(v) => {
+								v && ($builder.titleType = v.value);
+							}}
+						>
+							<Select.Trigger id="">
+								<Select.Value placeholder="Select a verified email to display" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="both" label="Both" />
+								<Select.Item value="siteOnly" label="Site Only" />
+								<Select.Item value="pageOnly" label="Page Only" />
+							</Select.Content>
+						</Select.Root>
+						<input hidden bind:value={$builder.titleType} />
 
 						{#if $builder.slug !== 'home'}
 							<Label for="slug">Slug</Label>
